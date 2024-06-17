@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -16,10 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        {children}
-      </body>
+        <body className={montserrat.className}>
+            <ReactQueryProvider>  
+              <link rel="icon" href="/favicon.ico" sizes="any" />
+              {children}
+            </ReactQueryProvider>
+        </body>
     </html>
   );
 }
