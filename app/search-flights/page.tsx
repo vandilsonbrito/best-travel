@@ -11,40 +11,22 @@ import HeaderSmallDevices from '../../components/formInput/headerSmallDevices/He
 import CardSkeletonSmallScreen from '../../components/cardSkeleton/CardSkeletonSmallScreen/CardSkeletonSmallScreen';
 import HeaderBigScreens from '../../components/formInput/HeaderBigScreens';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const SearchFlight: React.FC = () => {
 
-    const { updateAccessToken, flightData, addFlightData, departureTime, addDepartureTime, arrivalTime, addArrivalTime, departureiataCode, addDepartureiataCode, arrivalIataCode, addArrivalIataCode, flightItineraries, addFlightItineraries, flightDuration, addFlightDuration, flightPrice, addFlightPrice, flightPriceCurrency, addFlightPriceCurrency, airlinesLogo, addAirlinesLogo, carriersCode, addCarriersCode, isSearchBtnActive, updateIsSearchBtnActive, isSmallScreenInputClicked, updateIsSmallScreenInputClicked, updateIsDataResponseSuccess, isInputDataFilled } = useGlobalStore((state) => ({
+    const { updateAccessToken, flightData, addFlightData,  isSearchBtnActive, updateIsSearchBtnActive, isSmallScreenInputClicked, updateIsDataResponseSuccess, isInputDataFilled, isSearchBtnClicked } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         flightData: state.flightData,
         addFlightData: state.addFlightData,
-        departureTime: state.departureTime,
-        addDepartureTime: state.addDepartureTime,
-        arrivalTime: state.arrivalTime,
-        addArrivalTime: state.addArrivalTime,
-        departureiataCode: state.departureiataCode,
-        addDepartureiataCode: state.addDepartureiataCode,
-        arrivalIataCode: state.arrivalIataCode,
-        addArrivalIataCode: state.addArrivalIataCode,
-        flightItineraries: state.flightItineraries,
-        addFlightItineraries: state.addFlightItineraries,
-        flightDuration: state.flightDuration,
-        addFlightDuration: state.addFlightDuration,
-        flightPrice: state.flightPrice,
-        addFlightPrice: state.addFlightPrice,
-        flightPriceCurrency: state.flightPriceCurrency,
-        addFlightPriceCurrency: state.addFlightPriceCurrency,
-        airlinesLogo:  state.airlinesLogo,
-        addAirlinesLogo:  state.addAirlinesLogo,
-        carriersCode: state.carriersCode,
-        addCarriersCode: state.addCarriersCode,
         isSearchBtnActive: state.isSearchBtnActive,
         updateIsSearchBtnActive: state.updateIsSearchBtnActive,
         isSmallScreenInputClicked: state.isSmallScreenInputClicked,
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked, 
         updateIsDataResponseSuccess: state.updateIsDataResponseSuccess,
-        isInputDataFilled: state.isInputDataFilled
+        isInputDataFilled: state.isInputDataFilled,
+        isSearchBtnClicked: state.isSearchBtnClicked
     }));;
 
 
@@ -57,24 +39,16 @@ const SearchFlight: React.FC = () => {
       isFetching: boolean,
       isSuccess: boolean
     }
-    const { 
-      data:accessTokenData
-    } = useGetAccesToken() as queryResult;
-    const {  
-      data:searchFlightsData, 
-      error:errorSearchFlight, 
-      isPending,
-      isLoading,
-      isFetching,
-      isSuccess,
-      refetch 
-    } = useSearchFlights() as queryResult;
+    const { data:accessTokenData } = useGetAccesToken() as queryResult;
+    const {  data:searchFlightsData, error:errorSearchFlight, isPending, isLoading, isFetching, isSuccess,
+    refetch } = useSearchFlights() as queryResult;
     
     useEffect(() => {
+        console.log("Clicou Button to search")
         if(!isInputDataFilled) {
           toast.info("Preencha todos os campos!");
         }
-    }, [isInputDataFilled])
+    }, [isSearchBtnActive])
 
     useEffect(() => {
       updateAccessToken(accessTokenData?.accessToken);
@@ -95,6 +69,12 @@ const SearchFlight: React.FC = () => {
             updateIsSearchBtnActive(false);
         }
     }, [isSearchBtnActive])
+
+    useEffect(() => {
+      if(isSearchBtnClicked && (isInputDataFilled === false)) {
+          toast.info("Preencha todos os campos!");
+      }
+  }, [isSearchBtnClicked])
 
 
     /* console.log(departureTime.map((item) => { return item }))
@@ -143,75 +123,77 @@ const SearchFlight: React.FC = () => {
    
 
     return (
-      <>
-        { searchFlightsData ?
-          (
-            <main>
-                <ToastContainer/>
-                <HeaderSmallDevices className={`header-small-devices  w-full h-full flex flex-col gap-1 sticky top-0 z-50 bg-secundary p-7  sm:hidden`}/>
-        
-                <HeaderBigScreens className={`form-input w-full h-full bg-secundary p-8 pt-5 sm:px-10 shadow-xl z-50 sticky top-0  hidden sm:block`}/>
+        <main className='w-full h-full'>
+            <ToastContainer/>
+            <HeaderSmallDevices className={`header-small-devices  w-full h-full flex flex-col gap-1 sticky top-0 z-50 bg-secundary p-7  sm:hidden`}/>
+    
+            <HeaderBigScreens className={`form-input w-full h-full justify-center bg-secundary p-8 pt-5 sm:px-10 shadow-xl z-50 sticky top-0  hidden sm:flex`}/>
 
+            { searchFlightsData ?
+              (
                 <div className='w-full h-full min-h-screen bg-white text-black px-5 pt-8 pb-5 lg:px-40 flex flex-col items-center gap-5'>
-                    { isPending || isFetching || isLoading ? (
-                     
-                        <>
-                          <div className='hidden sm:flex flex-col gap-3'>
-                            <CardSkeleton/>
-                            <CardSkeleton/>
-                            <CardSkeleton/>
-                          </div>
-                          <div className="flex flex-col gap-3 sm:hidden">
-                            <CardSkeletonSmallScreen/>
-                            <CardSkeletonSmallScreen/>
-                            <CardSkeletonSmallScreen/>
-                          </div>
-                        </>
+                { isPending || isFetching || isLoading ? (
+                  
+                    <>
+                      <div className='hidden sm:flex flex-col gap-3'>
+                        <CardSkeleton/>
+                        <CardSkeleton/>
+                        <CardSkeleton/>
+                      </div>
+                      <div className="flex flex-col gap-3 sm:hidden">
+                        <CardSkeletonSmallScreen/>
+                        <CardSkeletonSmallScreen/>
+                        <CardSkeletonSmallScreen/>
+                      </div>
+                    </>
 
-                      ) : (
+                  ) : (
 
-                        <>
-                          { isSuccess ? 
-                            (
-                              <>
-                                { flightData?.length > 0 ? (
-                                flightData?.map((flight: any, index: number) => (
-                                  <li
-                                    key={index}
-                                    className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6"
+                    <>
+                      { isSuccess ? 
+                        (
+                          <>
+                            { flightData?.length > 0 ? (
+                            flightData?.map((flight: any, index: number) => (
+                              <li
+                                key={index}
+                                className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2"
+                              >
+                                <FlightDetails flight={flight} />
+                                <div className={`w-72 h-full ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[18rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
+                                  <p className="text-lg font-semibold">
+                                    {flight.price.currency} {flight.price.base}
+                                  </p>
+                                  <Link
+                                    href="#"
+                                    className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
                                   >
-                                    <FlightDetails flight={flight} />
-                                    <div className={`w-72 h-full ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[18rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2 border-t-2 sm:border-t-0 sm:border-l-2 border-[#89829446] mt-10 sm:mt-0`}>
-                                      <p className="text-lg font-semibold">
-                                        {flight.price.currency} {flight.price.base}
-                                      </p>
-                                      <Link
-                                        href="#"
-                                        className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
-                                      >
-                                        Book
-                                      </Link>
-                                    </div>
-                                  </li>
-                                ))
-                              ) : (
-                                <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
-                              )}
-                              </> 
-                          ) : ( 
-                                <>
-                                  <div className="w-full h-full min-h-screen flex flex-col justify-center items-center"><span className="loader"></span></div>
-                                </> ) 
-                          }
-                        </>
-                  )}
+                                    Book
+                                  </Link>
+                                </div>
+                              </li>
+                            ))
+                          ) : (
+                            <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                          )}
+                          </> 
+                      ) : ( 
+                            <>
+                              <div className="w-full h-full min-h-screen flex flex-col justify-center items-center"><span className="loader"></span></div>
+                            </> ) 
+                      }
+                    </>
+              )}
                 </div>
-            </main>
-          )
-          :
-          (<div className="w-full h-full min-h-screen flex flex-col justify-center items-center"><span className="loader"></span></div>)
-        }
-      </>
+              )
+              :
+              (
+                <div className="w-full h-full min-h-screen flex flex-col justify-center items-center">
+                  <span className="loader"></span>
+                </div>
+              )
+            }
+        </main>
     )
 }
 
@@ -221,9 +203,9 @@ interface FlightDetailsProps {
 
 const FlightDetails = ({ flight }: FlightDetailsProps) => {
   return (
-    <div className="w-full min-h-44 sm:min-h-52 h-full flex flex-col items-center justify-center  sm:pl-7">
+    <div className="w-full min-h-44 sm:min-h-52 h-full flex flex-col items-center justify-center  sm:pl-7  border-b-2 sm:border-b-0 sm:border-r-2 border-[#89829446] pb-10 sm:pb-0">
       {flight.itineraries.map((itinerary:any, index:number) => (
-        <div key={index} className='flex flex-col '>
+        <div key={index} className='w-full h-full flex flex-col '>
           <p className={`text-center font-bold py-5 sm:ml-10 ${flight.itineraries.length > 1 ? 'visible' : 'hidden'}`}>{ index === 0 && 'Departure' || index === 1 && 'Return' }</p>
           <ItineraryDetails key={index} itinerary={itinerary} />
         </div>
