@@ -21,10 +21,10 @@ function Banner() {
     }, [isSearchBtnClicked])
 
     return (
-        <section className='w-full h-full min-h-screen bg-hero bg-cover bg-no-repeat flex flex-col justify-center items-center px-4 md:px-32 lg:px-44 xl:px-14 relative '> 
+        <section className='w-full h-full min-h-screen bg-heroMobile md:bg-hero bg-cover bg-no-repeat flex flex-col justify-center items-center px-4 md:px-32 lg:px-44 xl:px-14 relative '> 
             <ToastContainer/>
             <Image
-                className="absolute top-5 w-20 md:top-16 md:w-32 xl:w-40"
+                className="absolute top-5 w-20 md:top-20 md:w-32 xl:w-40"
                 src="/logo-best-travel.png"
                 alt="logo"
                 width={400}
