@@ -11,11 +11,11 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "hero": "url('/hero.webp')",
+        "heroMobile": "url('/hero-mobile.webp')",
       },
       colors: {
-        primary: '#19464b',
-        secundary: '#3f5f5b',
-        greenAvocado: '#3f5f5b'
+        primary: '#051721',
+        secundary: '#04151e',
       }
     }
   },
