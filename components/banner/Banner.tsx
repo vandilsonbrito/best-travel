@@ -1,16 +1,30 @@
-'use client'
+'use client';
+import { useEffect } from 'react';
 import Image from "next/image";
 import FormInput from "../formInput/formInputBanner/FormInputBanner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useGlobalStore from '../../utils/stores/useGlobalStore';
 
 function Banner() {
 
-    /* const [tripMode, setTripMode] = useState<boolean>(false); */
+    const { isSearchBtnClicked, isInputDataFilled, updateIsSearchBtnClicked } = useGlobalStore((state) => ({
+        isSearchBtnClicked: state.isSearchBtnClicked,
+        isInputDataFilled: state.isInputDataFilled, 
+        updateIsSearchBtnClicked: state.updateIsSearchBtnClicked
+    }));
+   
+    useEffect(() => {
+        if(isSearchBtnClicked && (isInputDataFilled === false)) {
+            toast.info("Preencha todos os campos!");
+        }
+    }, [isSearchBtnClicked])
 
     return (
-        <section className='w-full h-full min-h-screen bg-hero bg-cover bg-no-repeat flex flex-col justify-center items-center px-4 md:px-32 lg:px-44 xl:px-14 relative'> 
-
+        <section className='w-full h-full min-h-screen bg-hero bg-cover bg-no-repeat flex flex-col justify-center items-center px-4 md:px-32 lg:px-44 xl:px-14 relative '> 
+            <ToastContainer/>
             <Image
-                className="absolute top-5 w-20 md:w-32 xl:w-44"
+                className="absolute top-5 w-20 md:top-16 md:w-32 xl:w-40"
                 src="/logo-best-travel.png"
                 alt="logo"
                 width={400}
