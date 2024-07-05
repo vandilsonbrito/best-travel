@@ -11,7 +11,7 @@ interface FormProps {
 
 export default function Form({ isFlightSearchPage }: FormProps) {
 
-    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addLocationResponseData, locationResponseData, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isDataResponseSuccess, isReturnTravel, updateIsInputDataFilled } = useGlobalStore((state:any) => ({
+    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addLocationResponseData, locationResponseData, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isDataResponseSuccess, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked } = useGlobalStore((state:any) => ({
         locationInputFrom: state.locationInputFrom,
         addLocationInputFrom: state.addLocationInputFrom,
         locationInputTo: state.locationInputTo,
@@ -29,7 +29,8 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked, 
         isDataResponseSuccess: state.isDataResponseSuccess,
         isReturnTravel: state.isReturnTravel, 
-        updateIsInputDataFilled: state.updateIsInputDataFilled
+        updateIsInputDataFilled: state.updateIsInputDataFilled,
+        updateIsSearchBtnClicked: state.updateIsSearchBtnClicked
     }))
     const router = useRouter();
 
@@ -97,6 +98,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
 
     const handleSearchBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        updateIsSearchBtnClicked(true);
         if(locationInputFrom && locationInputTo && departureDateInput && travelersInput) {
             if(isReturnTravel && returnDateInput) {
                 router.push('/search-flights')
@@ -120,12 +122,14 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         }
         else {
             updateIsInputDataFilled(false);
+            setTimeout(() => {
+                updateIsSearchBtnClicked(false);
+            }, 1000);
         }
     }
-    
 
     return (
-        <form >
+        <form className="w-full h-full max-w-[1300px]">
                 <div className="w-full flex justify-start items-start gap-5 mt-8">
                         <div className="w-20 h-5 flex justify-start items-center">
                             <input type="checkbox" name="one-way" id="one-way" className="w-4 h-4 accent-black"  />
@@ -232,13 +236,13 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 onChange={(e) => addTravelersInput(e.target.value)}
                                 value={travelersInput}
                                 />
-                                <MdPerson className="text-xl text-black absolute top-[1.62rem] right-[.45rem]"/>
+                                <MdPerson className="text-xl text-black absolute top-[1.8rem] right-[.45rem]"/>
                             </div>
                         </div>
                         <button 
                         type="submit"
                         onClick={(e) => handleSearchBtn(e)}
-                        className={`w-full xl:w-52 h-[4rem] lg:h-[3.8rem] px-2  ${isFlightSearchPage ? 'bg-transparent border-[2px] border-white' : 'bg-primary'} text-white font-medium text-lg rounded-md flex flex-col justify-center items-center hover:shadow-2xl active:scale-[.98] ease-in-out`}
+                        className={`w-full xl:w-52 h-[4rem] lg:h-[3.8rem] px-2  ${isFlightSearchPage ? 'bg-transparent border-[2px] border-white' : 'bg-primary'} border-2 border-slate-300 text-white font-medium text-lg rounded-md flex flex-col justify-center items-center hover:shadow-2xl active:scale-[.98] ease-in-out`}
                         >
                             <Link 
                             href=''>
