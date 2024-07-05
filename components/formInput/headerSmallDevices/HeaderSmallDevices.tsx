@@ -30,8 +30,8 @@ function HeaderSmallDevices({ className }: styleProp) {
                 name="from"
                 id="from"
                 placeholder="London"
-                /* onChange={(e) => addLocationInputFrom(e.target.value)} */
                 value={locationInputFrom}
+                readOnly
                 onClick={() => handleInputClick()}
                 />
             </div>
@@ -43,8 +43,8 @@ function HeaderSmallDevices({ className }: styleProp) {
                 name="to"
                 id="to"
                 placeholder="São Paulo"
-                /* onChange={(e) => addLocationInputTo(e.target.value)} */
                 value={locationInputTo}
+                readOnly
                 onClick={() => handleInputClick()}
                 />
             </div>
