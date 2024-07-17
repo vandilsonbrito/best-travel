@@ -11,7 +11,6 @@ function HeaderBigScreens({ className }:styleProp ) {
 
     return (
         <header className={className}>
-            <ToastContainer/>
             <Form isFlightSearchPage={true}/>
         </header>
     )
