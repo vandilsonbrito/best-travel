@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const SearchFlight: React.FC = () => {
 
-    const { updateAccessToken, flightData, addFlightData,  isSearchBtnActive, updateIsSearchBtnActive, isSmallScreenInputClicked, updateIsDataResponseSuccess, isInputDataFilled, isSearchBtnClicked } = useGlobalStore((state) => ({
+    const { updateAccessToken, flightData, addFlightData,  isSearchBtnActive, updateIsSearchBtnActive, isSmallScreenInputClicked, updateIsDataResponseSuccess, isInputDataFilled, isSearchBtnClicked, updateChoseFlight } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         flightData: state.flightData,
         addFlightData: state.addFlightData,
@@ -26,7 +26,8 @@ const SearchFlight: React.FC = () => {
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked, 
         updateIsDataResponseSuccess: state.updateIsDataResponseSuccess,
         isInputDataFilled: state.isInputDataFilled,
-        isSearchBtnClicked: state.isSearchBtnClicked
+        isSearchBtnClicked: state.isSearchBtnClicked, 
+        updateChoseFlight: state.updateChoseFlight,
     }));;
 
 
@@ -121,6 +122,11 @@ const SearchFlight: React.FC = () => {
         }
     }, [isSmallScreenInputClicked])
    
+    const handleBookClick = (index:number) => {
+      console.log("handleBookClicked", index)
+      updateChoseFlight(flightData[index])
+    }
+    
 
     return (
         <main className='w-full h-full'>
@@ -165,8 +171,9 @@ const SearchFlight: React.FC = () => {
                                     {flight.price.currency} {flight.price.base}
                                   </p>
                                   <Link
-                                    href="#"
+                                    href="/book-flight"
                                     className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
+                                    onClick={() => handleBookClick(index)}
                                   >
                                     Book
                                   </Link>

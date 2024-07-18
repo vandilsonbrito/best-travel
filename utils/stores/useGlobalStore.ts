@@ -25,6 +25,7 @@ type State = {
     isSmallScreenInputClicked: boolean, 
     isDataResponseSuccess: boolean,
     isInputDataFilled: boolean,
+    choseFlight: any
 }
 type Action = {
     updateAccessToken: (accessToken: State['accessToken']) => void,
@@ -51,6 +52,7 @@ type Action = {
     updateIsSmallScreenInputClicked: (updateIsSmallScreenInputClicked:boolean) => void,
     updateIsDataResponseSuccess:  (updateIsDataResponseSuccess:boolean) => void,
     updateIsInputDataFilled: (updateIsInputDataFilled:boolean) => void,
+    updateChoseFlight: (updateChoseFlight: any) => void,
 }
 const useGlobalStore = create<State & Action>((set) => ({
     accessToken: '',
@@ -101,6 +103,8 @@ const useGlobalStore = create<State & Action>((set) => ({
     updateIsDataResponseSuccess: (isDataResponseSuccess) => set(() => ({ isDataResponseSuccess: isDataResponseSuccess })),
     isInputDataFilled: false,
     updateIsInputDataFilled: (isInputDataFilled) => set(() => ({ isInputDataFilled: isInputDataFilled })),
+    choseFlight: {},
+    updateChoseFlight: (choseFlight) => set(() => ({ choseFlight: choseFlight }))
 }))
 export default useGlobalStore;
 
