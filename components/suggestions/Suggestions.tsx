@@ -48,12 +48,38 @@ function Suggestions() {
         infinite: false,
         speed: 500,
         slidesToShow: 3,
-        slidesToScroll: 3
+        slidesToScroll: 3,
+        responsive: [
+            {
+              breakpoint: 1100,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: true,
+                dots: true
+              }
+            },
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                initialSlide: 2
+              }
+            },
+            {
+              breakpoint: 580,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+              }
+            }
+          ]
       };
 
     return (
         <section className="w-full h-full ">
-            <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px5 md:px-20 pt-14 pb-20 ">
+            <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px5 md:px-20 pt-14 pb-20 overflow-hidden">
                 
                 <h2 className="text-lg lg:text-[1.5rem] text-white  lg:font-semibold mb-8 text-center tracking-wide">Favorite Destinations</h2>
                 <div className="w-full h-full">
@@ -68,7 +94,7 @@ function Suggestions() {
                                 height={700}
                                 className="h-[500px] rounded-lg"
                                 />
-                                <p className="text-white text-center mt-2">{places.description}</p>
+                                <p className="text-white text-center my-2">{places.description}</p>
                             </div>
                         ))
                     }   
