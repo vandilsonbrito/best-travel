@@ -12,6 +12,7 @@ import CardSkeletonSmallScreen from '../../components/cardSkeleton/CardSkeletonS
 import HeaderBigScreens from '../../components/formInput/HeaderBigScreens';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../../components/footer/Footer';
 
 
 const SearchFlight: React.FC = () => {
@@ -200,6 +201,7 @@ const SearchFlight: React.FC = () => {
                 </div>
               )
             }
+          <Footer/>
         </main>
     )
 }
