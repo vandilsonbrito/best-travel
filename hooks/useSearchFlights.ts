@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import useAccessTokenStore from '../utils/stores/useGlobalStore';
 import useGlobalStore from '../utils/stores/useGlobalStore';
 
-
 export function useSearchFlights() {
-    const accessToken = useAccessTokenStore((state) => state.accessToken);
-    const { locationInputFrom, locationInputTo, departureDateInput, returnDateInput, travelersInput, isReturnTravel, isInputDataFilled } = useGlobalStore((state) => ({
+
+    const { accessToken, locationInputFrom, locationInputTo, departureDateInput, returnDateInput, travelersInput, isReturnTravel, isInputDataFilled } = useGlobalStore((state) => ({
+        accessToken: state.accessToken,
         locationInputFrom: state.locationInputFrom,
         locationInputTo: state.locationInputTo,
         departureDateInput: state.departureDateInput,
@@ -96,6 +95,9 @@ export function useSearchFlights() {
                 }
               })
         });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
         return data;
     };
@@ -105,5 +107,6 @@ export function useSearchFlights() {
         enabled: !!accessToken && isInputDataFilled,
         
     }); 
+    console.log("!!accessToken && isInputDataFilled", !!accessToken && isInputDataFilled)
     return query;
 }
