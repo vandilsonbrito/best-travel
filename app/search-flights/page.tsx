@@ -172,7 +172,7 @@ const SearchFlight: React.FC = () => {
                                     {flight.price.currency} {flight.price.base}
                                   </p>
                                   <Link
-                                    href="/book-flight"
+                                    href="/passengers-info"
                                     className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
                                     onClick={() => handleBookClick(index)}
                                   >
