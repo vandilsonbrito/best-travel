@@ -2,17 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { useBookFlight } from '../../hooks/useBookFlight';
 import { useGetAccesToken } from '../../hooks/useGetAccesToken';
+import { useFlightOfferConfirm } from '../../hooks/useFlightOfferConfirm';
 import useGlobalStore from '../../utils/stores/useGlobalStore';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAirlineName } from '../../hooks/useAirlineName';
 
 const BookFlight: React.FC = () => {
 
     const { data:accessTokenData } = useGetAccesToken();
-    /* const { data:flightOfferData, error, status } = useFlightOfferConfirm(); */
-    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight } = useBookFlight();
+    const { data:flightOfferData, error, status } = useFlightOfferConfirm();
+    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching } = useBookFlight();
+    const { data:airlineNames } = useAirlineName();
+    console.log("airlineNames---", airlineNames)
 
     const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
@@ -33,13 +37,24 @@ const BookFlight: React.FC = () => {
     console.log("Status", statusBookingFlight)
     console.log("errorBookingFlight", errorBookingFlight)
     console.log("bookData", bookFlightData)
+    console.log("FLIGHTOfferDATA", flightOfferData)
+
+    interface Traveler {
+        gender: 'MALE' | 'FEMALE';
+        name: {
+          firstName: string;
+          lastName: string;
+        };
+    }
+    
+    console.log("statusBookingFlight", statusBookingFlight)
 
     return (
         <>
             <Header/>
             <main className='w-full h-full min-h-screen flex flex-col justify-center items-center'> 
                 {   
-                    statusBookingFlight === 'pending' ? 
+                    isFetching ? 
                     (
                         <>
                             <p className='text-lg mb-3'>Loading Data...</p>
@@ -48,7 +63,7 @@ const BookFlight: React.FC = () => {
                     )
                     :
                     (
-                        statusBookingFlight === 'error' ? 
+                        errorBookingFlight ? 
                         (
                             <>
                                 <p className='text-xl'>Error</p>
@@ -57,28 +72,51 @@ const BookFlight: React.FC = () => {
                         )
                         :
                         (
-                            <div className="w-full h-full min-h-[400px] p-5 md:p-12 flex flex-col items-center">
-                                <div className="w-full xl:w-[70%] flex flex-col items-center p-10 border-2 border-borderColor rounded-md">
-                                    <div className="w-full flex flex-col items-start text-lg font-medium pb-7 border-b-2 border-borderColor">
-                                        <p>Booking Status: <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'}`}>{bookFlightData?.data?.ticketingAgreement?.option}</span></p>
-                                        <p>Booking Code: <span className='font-semibold'>{bookFlightData?.data?.associatedRecords?.[0]?.reference}</span></p>
-                                        <p>Created At: {(bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0]}</p>
+                             
+                            bookFlightData?.errors?.length > 0 ?
+                            (
+                                <>
+                                    <p className='text-xl'>Error</p>
+                                    <p>Try to book again.</p>
+                                </>
+                            ) :
+                            (
+                                <div className="w-full h-full min-h-[400px] p-5 md:p-12 flex flex-col items-center">
+                                    <div className="w-full xl:w-[70%] flex flex-col items-center p-10 border-2 border-borderColor rounded-md">
+                                        <div className="w-full flex flex-col items-start text-lg font-medium pb-7 border-b-2 border-borderColor">
+                                            <p>Booking Status: 
+                                                <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'}`}>{' ' + (bookFlightData?.data?.ticketingAgreement?.option || ' Error')}</span>
+                                            </p>
+                                            <p>Booking Code: 
+                                                <span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.reference || '----')}</span>
+                                            </p>
+                                            <p>Created At: {(bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0] || '----'}</p>
+                                            <p>Passenger(s): 
+                                                <span className=''>{' ' + (bookFlightData?.data?.travelers?.map((traveler:Traveler) => `${traveler?.gender === 'MALE' ? 'Mr.' : 'Mrs.'} ${traveler?.name?.lastName}`).join(', ') || '----')}</span>
+                                            </p>
+                                            <p>Total Price: 
+                                                <span className=''> {bookFlightData?.data?.flightOffers?.[0]?.price.currency} {' ' + ((bookFlightData?.data?.flightOffers?.[0]?.price?.base) || '----')}</span>
+                                            </p>
+                                        </div>
+                                        <div className="w-full flex items-center justify-center">
+                                            {
+                                                flightBooked?.flightOffers?.map((flight: any, index: number) => (
+                                                    <>
+                                                        <li
+                                                        key={index}
+                                                        className="w-full max-w-[510px] flex flex-col sm:flex-row  justify-center items-center h-full rounded-xl py-6 px-2"
+                                                        >
+                                                        <FlightDetails flight={flight} departureDateInput={departureDateInput} returnDateInput={returnDateInput}/>
+                                                
+                                                        </li>
+                                                    </>
+                                                ))
+                                            }
+                                        </div>
                                     </div>
-                                    {
-                                        flightBooked?.flightOffers?.map((flight: any, index: number) => (
-                                            <>
-                                                <li
-                                                  key={index}
-                                                  className="w-full max-w-[510px] flex flex-col sm:flex-row  justify-center items-center h-full rounded-xl py-6 px-2"
-                                                >
-                                                  <FlightDetails flight={flight} departureDateInput={departureDateInput} returnDateInput={returnDateInput}/>
-                                                  
-                                                </li>
-                                            </>
-                                          ))
-                                    }
                                 </div>
-                            </div>
+                            )
+                            
                         )
                     )
                 }
