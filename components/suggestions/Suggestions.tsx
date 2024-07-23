@@ -79,7 +79,7 @@ function Suggestions() {
 
     return (
         <section className="w-full h-full ">
-            <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px5 md:px-20 pt-14 pb-20 overflow-hidden">
+            <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px-1 md:px-20 pt-14 pb-20 overflow-hidden">
                 
                 <h2 className="text-lg lg:text-[1.5rem] text-white  lg:font-semibold mb-8 text-center tracking-wide">Favorite Destinations</h2>
                 <div className="w-full h-full">
@@ -92,7 +92,7 @@ function Suggestions() {
                                 alt={places.description}
                                 width={400}
                                 height={700}
-                                className="h-[500px] rounded-lg"
+                                className="h-[450px] md:h-[500px] rounded-lg"
                                 />
                                 <p className="text-white text-center my-2">{places.description}</p>
                             </div>
