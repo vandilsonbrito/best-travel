@@ -39,10 +39,11 @@ const SearchFlight: React.FC = () => {
       refetch: any,
       isLoading: boolean,
       isFetching: boolean,
-      isSuccess: boolean
+      isSuccess: boolean,
+      status: any
     }
     const { data:accessTokenData } = useGetAccesToken() as queryResult;
-    const {  data:searchFlightsData, error:errorSearchFlight, isPending, isLoading, isFetching, isSuccess,
+    const {  data:searchFlightsData, error:errorSearchFlight, status, isPending, isLoading, isFetching, isSuccess,
     refetch } = useSearchFlights() as queryResult;
     
     useEffect(() => {
@@ -64,6 +65,9 @@ const SearchFlight: React.FC = () => {
     console.log(searchFlightsData?.data)
     console.log('Flights', flightData)
     console.log("ERROR", errorSearchFlight)
+    console.log("---STATUSSSSS", status)
+    console.log("---isLoading", isLoading)
+    console.log("---isFetching", isFetching)
 
     useEffect(() => {
         if(isSearchBtnActive) {
@@ -136,10 +140,9 @@ const SearchFlight: React.FC = () => {
     
             <HeaderBigScreens className={`form-input w-full h-full justify-center bg-secundary p-8 pt-5 sm:px-10 shadow-xl z-50 sticky top-0  hidden sm:flex`}/>
 
-            { searchFlightsData ?
-              (
+
                 <div className='w-full h-full min-h-screen bg-white text-black px-5 pt-8 pb-5 lg:px-40 flex flex-col items-center gap-5'>
-                { isPending || isFetching || isLoading ? (
+                { isFetching ? (
                   
                     <>
                       <div className='hidden sm:flex flex-col gap-3'>
@@ -157,50 +160,46 @@ const SearchFlight: React.FC = () => {
                   ) : (
 
                     <>
-                      { isSuccess ? 
+                      { errorSearchFlight ? 
                         (
-                          <>
-                            { flightData?.length > 0 ? (
-                            flightData?.map((flight: any, index: number) => (
-                              <li
-                                key={index}
-                                className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2"
-                              >
-                                <FlightDetails flight={flight} />
-                                <div className={`w-72 h-full ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[18rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
-                                  <p className="text-lg font-semibold">
-                                    {flight.price.currency} {flight.price.base}
-                                  </p>
-                                  <Link
-                                    href="/passengers-info"
-                                    className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
-                                    onClick={() => handleBookClick(index)}
-                                  >
-                                    Book
-                                  </Link>
-                                </div>
-                              </li>
-                            ))
-                          ) : (
-                            <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
-                          )}
-                          </> 
+                            <>  
+                              <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                            </>
+                          
                       ) : ( 
                             <>
-                              <div className="w-full h-full min-h-screen flex flex-col justify-center items-center"><span className="loader"></span></div>
-                            </> ) 
+                                { flightData?.length > 0 ? (
+                                flightData?.map((flight: any, index: number) => (
+                                  <li
+                                    key={index}
+                                    className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2"
+                                  >
+                                    <FlightDetails flight={flight} />
+                                    <div className={`w-72 h-full ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[18rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
+                                      <p className="text-lg font-semibold">
+                                        {flight.price.currency} {flight.price.base}
+                                      </p>
+                                      <Link
+                                        href="/passengers-info"
+                                        className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
+                                        onClick={() => handleBookClick(index)}
+                                      >
+                                        Book
+                                      </Link>
+                                    </div>
+                                  </li>
+                                ))
+                              ) : (
+                                <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                              )}
+                            
+                          </> 
+                          ) 
                       }
                     </>
-              )}
-                </div>
-              )
-              :
-              (
-                <div className="w-full h-full min-h-screen flex flex-col justify-center items-center">
-                  <span className="loader"></span>
-                </div>
-              )
-            }
+                  )}
+              </div>
+              
           <Footer/>
         </main>
     )
