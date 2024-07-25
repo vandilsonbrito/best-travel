@@ -7,20 +7,25 @@ import Header from '../../components/header/Header';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Footer from '../../components/footer/Footer';
+import { useCountryInfo } from '../../hooks/useCountryInfo';
 
 const PassengersInfo: React.FC = () => {
     const router = useRouter();
     const { data:accessTokenData } = useGetAccesToken();
     const { data:flightOfferData, error, status } = useFlightOfferConfirm();
+    const { data:countryInfo } = useCountryInfo()
+
+    console.log("###COUNTRY---INFO####", countryInfo?.[0]?.nome?.['abreviado-EN'])
 
     const [confirmedFlightOfferData, setConfirmedFlightOfferData] = useState<any>([]);
-    const { updateAccessToken, travelersInput, updatePassengerInfo, passengerInfo, choseFlight, updateCarrierCode } = useGlobalStore((state) => ({
+    const { updateAccessToken, travelersInput, updatePassengerInfo, passengerInfo, choseFlight, updateCarrierCode, updatePassengerBirthPlace } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         travelersInput: state.travelersInput,
         updatePassengerInfo: state.updatePassengerInfo,
         passengerInfo: state.passengerInfo,
         choseFlight: state.choseFlight, 
-        updateCarrierCode: state.updateCarrierCode
+        updateCarrierCode: state.updateCarrierCode,
+        updatePassengerBirthPlace: state.updatePassengerBirthPlace
     }));
     
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -30,6 +35,10 @@ const PassengersInfo: React.FC = () => {
         router.push('/book-flight');
         console.log("ReactHookForm---------------------", data);
     };
+
+    useEffect(() => {
+        updatePassengerBirthPlace(countryInfo?.map((country:any) => country.nome?.['abreviado-EN']))
+    }, [countryInfo])
 
     useEffect(() => {
         updateAccessToken(accessTokenData?.accessToken);
@@ -57,10 +66,10 @@ const PassengersInfo: React.FC = () => {
     };
 
     useEffect(() => {
-        if (choseFlight) {
-            const allCarrierCodes = choseFlight.itineraries.flatMap((itinerary: any) => 
+        if (choseFlight) { 
+            const allCarrierCodes = choseFlight?.itineraries?.flatMap((itinerary: any) => 
                     itinerary.segments.map((segment: any) => segment.carrierCode)
-                )         
+                )
             updateCarrierCode(Array.from(new Set(allCarrierCodes)));
         }
     }, [accessTokenData, choseFlight, updateCarrierCode]);
@@ -145,7 +154,7 @@ const FormInputs = ({ passengerNumber, register, errors }: FormInputProps) => {
                 </div>
                 <div className="w-full flex flex-col">
                     <label htmlFor={`Nationality${passengerNumber}`}>Nationality</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="Nationality" {...register(`Nationality${passengerNumber}`)} />
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="BR" {...register(`Nationality${passengerNumber}`, { required: true })} />
                     {errors[`Nationality${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
                 </div>
             </div>
