@@ -2,16 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import useGlobalStore from '../utils/stores/useGlobalStore';
 
 export function useBookFlight() {
-    const { accessToken, choseFlight, passengerInfo, travelersInput } = useGlobalStore((state) => ({
+    const { accessToken, choseFlight, passengerInfo, travelersInput, passengerBirthPlace } = useGlobalStore((state) => ({
         accessToken: state.accessToken,
         choseFlight: state.choseFlight,
         passengerInfo: state.passengerInfo,
-        travelersInput: state.travelersInput
+        travelersInput: state.travelersInput, 
+        passengerBirthPlace: state.passengerBirthPlace
     }));
 
     console.log("Token", accessToken)
     console.log("ChoseFlight", choseFlight);
     console.log("passengerInfo-------", passengerInfo);
+
+    
 
     let passengersInformation = [];
     const passengerInformationModel = (passengerInfo:any, travelersInput:string) => {
@@ -38,14 +41,14 @@ export function useBookFlight() {
                 documents: [
                   {
                     documentType: "PASSPORT",
-                    birthPlace: "Madrid",
-                    issuanceLocation: "Madrid",
+                    birthPlace: passengerBirthPlace[index - 1],
+                    issuanceLocation: passengerBirthPlace[index - 1],
                     issuanceDate: passengerInfo[`IssuanceDate${index}`],
                     number: passengerInfo[`PassportID${index}`],
                     expiryDate: passengerInfo[`ExpireDate${index}`],
-                    issuanceCountry: "ES",
-                    validityCountry: "ES",
-                    nationality: "ES",
+                    issuanceCountry: passengerInfo[`Nationality${index}`],
+                    validityCountry: passengerInfo[`Nationality${index}`],
+                    nationality: passengerInfo[`Nationality${index}`],
                     holder: true
                   }
                 ]
