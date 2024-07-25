@@ -14,11 +14,13 @@ const PassengersInfo: React.FC = () => {
     const { data:flightOfferData, error, status } = useFlightOfferConfirm();
 
     const [confirmedFlightOfferData, setConfirmedFlightOfferData] = useState<any>([]);
-    const { updateAccessToken, travelersInput, updatePassengerInfo, passengerInfo } = useGlobalStore((state) => ({
+    const { updateAccessToken, travelersInput, updatePassengerInfo, passengerInfo, choseFlight, updateCarrierCode } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         travelersInput: state.travelersInput,
         updatePassengerInfo: state.updatePassengerInfo,
-        passengerInfo: state.passengerInfo
+        passengerInfo: state.passengerInfo,
+        choseFlight: state.choseFlight, 
+        updateCarrierCode: state.updateCarrierCode
     }));
     
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
@@ -53,6 +55,15 @@ const PassengersInfo: React.FC = () => {
         }
         return forms;
     };
+
+    useEffect(() => {
+        if (choseFlight) {
+            const allCarrierCodes = choseFlight.itineraries.flatMap((itinerary: any) => 
+                    itinerary.segments.map((segment: any) => segment.carrierCode)
+                )         
+            updateCarrierCode(Array.from(new Set(allCarrierCodes)));
+        }
+    }, [accessTokenData, choseFlight, updateCarrierCode]);
 
     console.log("Status", status);
     console.log("errorBookingFlight", error);
