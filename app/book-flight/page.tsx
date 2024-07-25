@@ -12,27 +12,30 @@ import { useAirlineName } from '../../hooks/useAirlineName';
 
 const BookFlight: React.FC = () => {
 
-    const { data:accessTokenData } = useGetAccesToken();
-    const { data:flightOfferData, error, status } = useFlightOfferConfirm();
-    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching } = useBookFlight();
-    const { data:airlineNames } = useAirlineName();
-    console.log("airlineNames---", airlineNames)
-
-    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput } = useGlobalStore((state) => ({
+    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput, carrierCode, updateCarrierCode } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         updateFlightBooked: state.updateFlightBooked,
         flightBooked: state.flightBooked,
         departureDateInput: state.departureDateInput,
-        returnDateInput: state.returnDateInput
+        returnDateInput: state.returnDateInput,
+        carrierCode: state.carrierCode,
+        updateCarrierCode: state.updateCarrierCode
     }));
 
+    const { data:accessTokenData } = useGetAccesToken();
     useEffect(() => {
         updateAccessToken(accessTokenData?.accessToken);
     }, [accessTokenData, updateAccessToken])
 
+    const { data:flightOfferData, error, status } = useFlightOfferConfirm();
+    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching } = useBookFlight();
     useEffect(() => {
         updateFlightBooked(bookFlightData?.data)
-    }, [accessTokenData, bookFlightData?.data])
+    }, [accessTokenData, bookFlightData?.data, updateFlightBooked])
+
+    
+    const { data:airlineNames } = useAirlineName();
+    console.log("airlineNames---", airlineNames?.data)
 
     console.log("Status", statusBookingFlight)
     console.log("errorBookingFlight", errorBookingFlight)
@@ -48,6 +51,7 @@ const BookFlight: React.FC = () => {
     }
     
     console.log("statusBookingFlight", statusBookingFlight)
+    console.log("---------carrierCode", carrierCode)
 
     return (
         <>
@@ -85,17 +89,20 @@ const BookFlight: React.FC = () => {
                                     <div className="w-full xl:w-[70%] flex flex-col items-center p-10 border-2 border-borderColor rounded-md">
                                         <div className="w-full flex flex-col items-start text-lg font-medium pb-7 border-b-2 border-borderColor">
                                             <p>Booking Status: 
-                                                <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'}`}>{' ' + (bookFlightData?.data?.ticketingAgreement?.option || ' Error')}</span>
+                                                <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'} font-semibold`}>{' ' + (bookFlightData?.data?.ticketingAgreement?.option || ' Error')}</span>
                                             </p>
-                                            <p>Booking Code: 
+                                            <p>Booking Code:
                                                 <span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.reference || '----')}</span>
                                             </p>
-                                            <p>Created At: {(bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0] || '----'}</p>
+                                            <p>Created At:<span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0] || '----'}</span></p>
                                             <p>Passenger(s): 
-                                                <span className=''>{' ' + (bookFlightData?.data?.travelers?.map((traveler:Traveler) => `${traveler?.gender === 'MALE' ? 'Mr.' : 'Mrs.'} ${traveler?.name?.lastName}`).join(', ') || '----')}</span>
+                                                <span className='font-semibold'>{' ' + (bookFlightData?.data?.travelers?.map((traveler:Traveler) => `${traveler?.gender === 'MALE' ? 'Mr.' : 'Mrs.'} ${traveler?.name?.lastName}`).join(', ') || '----')}</span>
                                             </p>
-                                            <p>Total Price: 
-                                                <span className=''> {bookFlightData?.data?.flightOffers?.[0]?.price.currency} {' ' + ((bookFlightData?.data?.flightOffers?.[0]?.price?.base) || '----')}</span>
+                                            <p>Total Price:
+                                                <span className='font-semibold'> {bookFlightData?.data?.flightOffers?.[0]?.price.currency} {' ' + ((bookFlightData?.data?.flightOffers?.[0]?.price?.base) || '----')}</span>
+                                            </p>
+                                            <p>Airline(s): 
+                                                <span className='font-semibold'>{' ' + (airlineNames?.data.map((airline:any) => ` ${airline.commonName}` ) || '----')}</span>
                                             </p>
                                         </div>
                                         <div className="w-full flex items-center justify-center">
@@ -181,19 +188,20 @@ interface FlightDetailsProps {
     segment: any;
     key: number;
   }
+
   const SegmentDetails = ({ itinerary, segment }: SegmentDetailsProps) => {
-  
+    
     return (
       <div className='w-full h-[5.2rem] flex flex-col sm:flex-row  justify-between items-center'>
-  
-              <Image
-              src={getAirlineLogo(segment.carrierCode)}
-              alt="Airline Logo"
-              width={50}
-              height={50}
-              className='pb-5 sm:py-0 w-8 sm:w-[50px]'
-              />
-              
+        
+                <Image
+                src={getAirlineLogo(segment.carrierCode)}
+                alt="Airline Logo"
+                width={50}
+                height={50}
+                className='pb-5 sm:py-0 w-8 sm:w-[50px]'
+                />
+                   
               {/* Flight Info */}
               <div className="w-full h-fit flex items-center justify-center">
                   <div className="w-fit flex items-center gap-5 px-5">
