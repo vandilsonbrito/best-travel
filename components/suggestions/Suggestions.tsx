@@ -31,7 +31,7 @@ function Suggestions() {
         },
         {
             img: '/switzerland.jpg',
-            description: 'Switzerland'
+            description: 'Lauterbrunnen, Switzerland'
         },
         {
             img: '/pragser-wildsee.jpg',
