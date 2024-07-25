@@ -27,7 +27,8 @@ type State = {
     isInputDataFilled: boolean,
     choseFlight: any,
     passengerInfo: any,
-    flightBooked: any
+    flightBooked: any,
+    carrierCode: string[]
 }
 type Action = {
     updateAccessToken: (accessToken: State['accessToken']) => void,
@@ -56,7 +57,8 @@ type Action = {
     updateIsInputDataFilled: (updateIsInputDataFilled:boolean) => void,
     updateChoseFlight: (updateChoseFlight: any) => void,
     updatePassengerInfo: (updatePassengerInfo: any) => void,
-    updateFlightBooked: (updateFlightBooked: any) => void
+    updateFlightBooked: (updateFlightBooked: any) => void,
+    updateCarrierCode: (updateCarrierCode: any) => void,
 }
 const useGlobalStore = create<State & Action>((set) => ({
     accessToken: '',
@@ -112,7 +114,9 @@ const useGlobalStore = create<State & Action>((set) => ({
     passengerInfo: {},
     updatePassengerInfo: (passengerInfo) => set(() => ({ passengerInfo: passengerInfo })),
     flightBooked: {},
-    updateFlightBooked: (flightBooked) => set(() => ({ flightBooked: flightBooked }))
+    updateFlightBooked: (flightBooked) => set(() => ({ flightBooked: flightBooked })),
+    carrierCode: [],
+    updateCarrierCode: (carrierCode) => set((state) => ({ ...state, carrierCode: [...state.carrierCode, carrierCode] }))
 }))
 export default useGlobalStore;
 
