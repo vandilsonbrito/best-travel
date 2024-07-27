@@ -1,6 +1,6 @@
 // components/SearchFlight?.tsx
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useGlobalStore from '../../utils/stores/useGlobalStore';
@@ -29,7 +29,8 @@ const SearchFlight: React.FC = () => {
         isInputDataFilled: state.isInputDataFilled,
         isSearchBtnClicked: state.isSearchBtnClicked, 
         updateChoseFlight: state.updateChoseFlight,
-    }));;
+        
+    }));
 
 
     interface queryResult {
@@ -51,7 +52,7 @@ const SearchFlight: React.FC = () => {
         if(!isInputDataFilled) {
           toast.info("Preencha todos os campos!");
         }
-    }, [isSearchBtnActive])
+    }, [isInputDataFilled, isSearchBtnActive])
 
     useEffect(() => {
       updateAccessToken(accessTokenData?.accessToken);
@@ -60,7 +61,7 @@ const SearchFlight: React.FC = () => {
     useEffect(() => {
       addFlightData(searchFlightsData?.data);
       updateIsDataResponseSuccess(isSuccess)
-    }, [addFlightData, searchFlightsData?.data])
+    }, [addFlightData, isSuccess, searchFlightsData?.data, updateIsDataResponseSuccess])
     
     console.log(searchFlightsData?.data)
     console.log('Flights', flightData)
@@ -74,21 +75,14 @@ const SearchFlight: React.FC = () => {
             refetch();
             updateIsSearchBtnActive(false);
         }
-    }, [isSearchBtnActive])
+    }, [isSearchBtnActive, refetch, updateIsSearchBtnActive])
 
     useEffect(() => {
       if(isSearchBtnClicked && (isInputDataFilled === false)) {
           toast.info("Preencha todos os campos!");
       }
-  }, [isSearchBtnClicked])
+  }, [isInputDataFilled, isSearchBtnClicked])
 
-
-    /* console.log(departureTime.map((item) => { return item }))
-    console.log(arrivalTime.map((item) => { return item }))
-    console.log(carriersCode)
-    console.log(departureiataCode)
-    console.log(arrivalIataCode) */
-    console.log("isSmallScreenInputClicked", isSmallScreenInputClicked)
 
     useEffect(() => {
         console.log("TTTTTTTTTTTTTTT", isSmallScreenInputClicked)
