@@ -2,21 +2,20 @@
 import Link from "next/link";
 import { MdPerson } from "react-icons/md";
 import useGlobalStore from '../../../utils/stores/useGlobalStore';
-import { ChangeEvent, ReactEventHandler, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface FormProps {
     isFlightSearchPage: boolean;
-  }
+}
 
 export default function Form({ isFlightSearchPage }: FormProps) {
 
-    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addLocationResponseData, locationResponseData, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isDataResponseSuccess, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked } = useGlobalStore((state:any) => ({
+    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked } = useGlobalStore((state:any) => ({
         locationInputFrom: state.locationInputFrom,
         addLocationInputFrom: state.addLocationInputFrom,
         locationInputTo: state.locationInputTo,
         addLocationInputTo: state.addLocationInputTo,
-        addLocationResponseData: state.addLocationResponseData,
         locationResponseData: state.locationResponseData,
         addDepartureDateInput: state.addDepartureDateInput,
         addReturnDateInput: state.addReturnDateInput,
@@ -27,7 +26,6 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         updateIsReturnTravel: state.updateIsReturnTravel,
         updateIsSearchBtnActive: state.updateIsSearchBtnActive, 
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked, 
-        isDataResponseSuccess: state.isDataResponseSuccess,
         isReturnTravel: state.isReturnTravel, 
         updateIsInputDataFilled: state.updateIsInputDataFilled,
         updateIsSearchBtnClicked: state.updateIsSearchBtnClicked
@@ -68,24 +66,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 input.removeEventListener('change', handleChange);
             });
         };
-    }, [checkInputs]);
-
-
-    type Traveler = {
-        id: string,
-        travelerType: string
-    }
-    const travelersHelper = () => {
-        let travelers = [];
-        let aux = { id: '', travelerType: "ADULT"};
-        for(let index = 1; index <= Number(travelersInput); index++) {
-            travelers.push(aux);
-        }
-        return travelers.map((item: Traveler, index:number) => ({
-            ...item,
-            id: `${index + 1}`
-        }));
-    }
+    }, [checkInputs, updateIsReturnTravel]);
 
     const handleReturnDateInput = (e:ChangeEvent<HTMLInputElement>) => {
         addReturnDateInput(e.target.value);
@@ -94,7 +75,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         if(!isReturnTravel) {
             addReturnDateInput('');  
         }
-    }, [isReturnTravel]) 
+    }, [addReturnDateInput, isReturnTravel]) 
 
     const handleSearchBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
