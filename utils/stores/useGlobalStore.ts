@@ -118,7 +118,7 @@ const useGlobalStore = create<State & Action>((set) => ({
     flightBooked: {},
     updateFlightBooked: (flightBooked) => set(() => ({ flightBooked: flightBooked })),
     carrierCode: [],
-    updateCarrierCode: (carrierCode) => set((state) => ({ ...state, carrierCode: [...state.carrierCode, carrierCode] })),
+    updateCarrierCode: (carrierCode) => set(() => ({ carrierCode: carrierCode })),
     passengerBirthPlace: [],
     updatePassengerBirthPlace: (carrierCode) => set((state) => ({ ...state, carrierCode: [...state.carrierCode, carrierCode] }))
 }))
