@@ -7,19 +7,18 @@ import useGlobalStore from '../../utils/stores/useGlobalStore';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useAirlineName } from '../../hooks/useAirlineName';
+import PreventBackNavigation from '../../components/preventBackNavigation/PreventBackNavigation';
 
 const BookFlight: React.FC = () => {
 
-    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput, carrierCode, updateCarrierCode } = useGlobalStore((state) => ({
+    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput, carrierCode,  } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         updateFlightBooked: state.updateFlightBooked,
         flightBooked: state.flightBooked,
         departureDateInput: state.departureDateInput,
         returnDateInput: state.returnDateInput,
         carrierCode: state.carrierCode,
-        updateCarrierCode: state.updateCarrierCode
     }));
 
     const { data:accessTokenData } = useGetAccesToken();
@@ -54,7 +53,8 @@ const BookFlight: React.FC = () => {
     console.log("---------carrierCode", carrierCode)
 
     return (
-        <>
+        <>  
+            <PreventBackNavigation/>
             <Header/>
             <main className='w-full h-full min-h-screen flex flex-col justify-center items-center'> 
                 {   
@@ -102,7 +102,7 @@ const BookFlight: React.FC = () => {
                                                 <span className='font-semibold'> {bookFlightData?.data?.flightOffers?.[0]?.price.currency} {' ' + ((bookFlightData?.data?.flightOffers?.[0]?.price?.base) || '----')}</span>
                                             </p>
                                             <p>Airline(s): 
-                                                <span className='font-semibold'>{' ' + (airlineNames?.data.map((airline:any) => ` ${airline.commonName}` ) || '----')}</span>
+                                                <span className='font-semibold'>{' ' + (airlineNames?.data?.map((airline:any) => ` ${airline?.commonName}` ) || '----')}</span>
                                             </p>
                                         </div>
                                         <div className="w-full flex items-center justify-center">
@@ -190,7 +190,7 @@ interface FlightDetailsProps {
   }
 
   const SegmentDetails = ({ itinerary, segment }: SegmentDetailsProps) => {
-    
+
     return (
       <div className='w-full h-[5.2rem] flex flex-col sm:flex-row  justify-between items-center'>
         
