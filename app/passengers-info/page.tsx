@@ -29,6 +29,7 @@ const PassengersInfo: React.FC = () => {
     }));
     
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    console.log("FORMErrorrrrrrrrr", errors)
 
     const onSubmit = (data: any) => {
         updatePassengerInfo(data);
@@ -38,7 +39,7 @@ const PassengersInfo: React.FC = () => {
 
     useEffect(() => {
         updatePassengerBirthPlace(countryInfo?.map((country:any) => country.nome?.['abreviado-EN']))
-    }, [countryInfo])
+    }, [countryInfo, updatePassengerBirthPlace])
 
     useEffect(() => {
         updateAccessToken(accessTokenData?.accessToken);
@@ -69,7 +70,8 @@ const PassengersInfo: React.FC = () => {
         if (choseFlight) { 
             const allCarrierCodes = choseFlight?.itineraries?.flatMap((itinerary: any) => 
                     itinerary.segments.map((segment: any) => segment.carrierCode)
-                )
+            )
+            console.log("allCarrierCodeSSSSSSSS", Array.from(new Set(allCarrierCodes)));
             updateCarrierCode(Array.from(new Set(allCarrierCodes)));
         }
     }, [accessTokenData, choseFlight, updateCarrierCode]);
@@ -101,12 +103,24 @@ const PassengersInfo: React.FC = () => {
     );
 };
 
+const isOver18 = (birthdate:Date) => {
+    const birthDate = new Date(birthdate);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1 >= 18;
+    }
+  
+    return age >= 18;
+  };
+
 interface FormInputProps {
     passengerNumber: number;
     register: any;
     errors: any;
 }
-
 const FormInputs = ({ passengerNumber, register, errors }: FormInputProps) => {
     return (
         <section className='w-full h-full flex flex-col gap-5 p-7 rounded-sm shadow-2xl'>
@@ -122,25 +136,46 @@ const FormInputs = ({ passengerNumber, register, errors }: FormInputProps) => {
                 </div>
                 <div className='w-full flex flex-col'>
                     <label htmlFor={`FirstName${passengerNumber}`}>First name</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="John" {...register(`FirstName${passengerNumber}`, { required: true, maxLength: 20 })} />
-                    {errors[`FirstName${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="John" 
+                    {...register(`FirstName${passengerNumber}`, { required: true, pattern: {
+                        value: /^[A-Za-zÀ-ÿ\s]{1,20}$/,
+                        message: "Invalid Format"
+                    } })} />
+                    {errors[`FirstName${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`FirstName${passengerNumber}`].message || 'This field is required'
+                    }</span>}
                 </div>
                 <div className='w-full flex flex-col'>
                     <label htmlFor={`LastName${passengerNumber}`}>Last name</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="Doe" {...register(`LastName${passengerNumber}`, { required: true, maxLength: 50 })} />
-                    {errors[`LastName${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="Doe" 
+                    {...register(`LastName${passengerNumber}`, { required: true, pattern: {
+                        value: /^[A-Za-zÀ-ÿ\s]{1,30}$/,
+                        message: "Invalid Format"
+                    } })} />
+                    {errors[`LastName${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`LastName${passengerNumber}`].message || 'This field is required'    
+                    }</span>}
                 </div>
                 <div className="w-full md:w-60 flex flex-col">
                     <label htmlFor={`DateOfBirth${passengerNumber}`}>Date Of Birth</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="date" placeholder="Issuance Date" {...register(`DateOfBirth${passengerNumber}`, { required: true })} />
-                    {errors[`DateOfBirth${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="date" placeholder="Issuance Date" 
+                    {...register(`DateOfBirth${passengerNumber}`, { required: true, 
+                        validate: {
+                        isOver18: (value:Date) => isOver18(value) || 'You must be at least 18 years old',
+                      },})} />
+                    {errors[`DateOfBirth${passengerNumber}`] && <span className='text-red-500 font-medium'>{errors[`DateOfBirth${passengerNumber}`].message || 'This field is required'}</span>}
                 </div>
             </div>
             <div className="w-full flex flex-col lg:flex-row gap-7">
                 <div className="w-full flex flex-col">
                     <label htmlFor={`PassportID${passengerNumber}`}>Passport or ID</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="0000000" {...register(`PassportID${passengerNumber}`, { required: true, max: 11, maxLength: 11 })} />
-                    {errors[`PassportID${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="XYZ000 | 0000000" {...register(`PassportID${passengerNumber}`, { required: true, pattern: {
+                        value: /^[A-Z0-9]{5,11}$/,
+                        message: "Invalid Document Number"
+                    } })} />
+                    {errors[`PassportID${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`PassportID${passengerNumber}`].message || 'This field is required'
+                    }</span>}
                 </div>
                 <div className="w-full md:w-60 flex flex-col">
                     <label htmlFor={`IssuanceDate${passengerNumber}`}>Issuance Date</label>
@@ -154,20 +189,35 @@ const FormInputs = ({ passengerNumber, register, errors }: FormInputProps) => {
                 </div>
                 <div className="w-full flex flex-col">
                     <label htmlFor={`Nationality${passengerNumber}`}>Nationality</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="BR" {...register(`Nationality${passengerNumber}`, { required: true })} />
-                    {errors[`Nationality${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="text" placeholder="BR" {...register(`Nationality${passengerNumber}`, { required: true, pattern: {
+                        value: /^[A-Z]{2}$/,
+                        message: 'Invalid Format'
+                    } })} />
+                    {errors[`Nationality${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`Nationality${passengerNumber}`].message || 'This field is required'
+                    }</span>}
                 </div>
             </div>
             <div className='w-full flex flex-col lg:flex-row gap-7'>
                 <div className="w-full flex flex-col">
                     <label htmlFor={`Email${passengerNumber}`}>Email</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="email" placeholder="my@email.com" {...register(`Email${passengerNumber}`, { required: true })} />
-                    {errors[`Email${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="email" placeholder="my@email.com" {...register(`Email${passengerNumber}`, { required: true, pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "Invalid Email Address"
+                    } })} />
+                    {errors[`Email${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`Email${passengerNumber}`].message || 'This field is required'
+                    }</span>}
                 </div>
                 <div className="w-full flex flex-col">
                     <label htmlFor={`MobileNumber${passengerNumber}`}>Mobile number</label>
-                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="tel" placeholder="Number" {...register(`MobileNumber${passengerNumber}`, { required: true })} />
-                    {errors[`MobileNumber${passengerNumber}`] && <span className='text-red-500 font-medium'>This field is required</span>}
+                    <input className='p-2 border-[1px] border-slate-500 rounded-md' type="tel" placeholder="Number" {...register(`MobileNumber${passengerNumber}`, { required: true, pattern: {
+                        value: /^\d{10,15}$/,
+                        message: "Invalid Format"
+                    } })} />
+                    {errors[`MobileNumber${passengerNumber}`] && <span className='text-red-500 font-medium'>{
+                        errors[`MobileNumber${passengerNumber}`].message || 'This field is required'    
+                    }</span>}
                 </div>
             </div>
         </section>
