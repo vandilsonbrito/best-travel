@@ -2,16 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import useGlobalStore from '../utils/stores/useGlobalStore';
 
 export function useAirlineName() {
-    const { accessToken, choseFlight, carrierCode } = useGlobalStore((state) => ({
+    const { accessToken, carrierCode } = useGlobalStore((state) => ({
         accessToken: state.accessToken,
-        choseFlight: state.choseFlight,
         carrierCode:state.carrierCode
     }));
-    
-
-    const IATACode = carrierCode.slice(0,(carrierCode.length)/2)
-    console.log("IATACode---------", IATACode)
-    console.log("IATACode---TYPE----", typeof IATACode)
 
     const fetchIataCode =  async () => {
         try {   
