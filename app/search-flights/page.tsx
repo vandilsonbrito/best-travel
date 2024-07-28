@@ -79,7 +79,7 @@ const SearchFlight: React.FC = () => {
 
     useEffect(() => {
       if(isSearchBtnClicked && (isInputDataFilled === false)) {
-          toast.info("Preencha todos os campos!");
+          toast.info("Fill in all the inputs correctly!");
       }
   }, [isInputDataFilled, isSearchBtnClicked])
 
@@ -169,13 +169,13 @@ const SearchFlight: React.FC = () => {
                                     className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2"
                                   >
                                     <FlightDetails flight={flight} />
-                                    <div className={`w-72 h-full ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[18rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
+                                    <div className={`w-72 h-full pl-2 ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[11rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
                                       <p className="text-lg font-semibold">
                                         {flight.price.currency} {flight.price.base}
                                       </p>
                                       <Link
                                         href="/passengers-info"
-                                        className="px-16 py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
+                                        className="px-[4.5rem] py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
                                         onClick={() => handleBookClick(index)}
                                       >
                                         Book
