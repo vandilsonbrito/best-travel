@@ -27,13 +27,13 @@ const BookFlight: React.FC = () => {
     }, [accessTokenData, updateAccessToken])
 
     const { data:flightOfferData, error, status } = useFlightOfferConfirm();
-    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching } = useBookFlight();
+    const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching:isBookFlightDataFetching } = useBookFlight();
     useEffect(() => {
         updateFlightBooked(bookFlightData?.data)
     }, [accessTokenData, bookFlightData?.data, updateFlightBooked])
 
     
-    const { data:airlineNames } = useAirlineName();
+    const { data:airlineNames, isFetching:isAirlineNamesFetching } = useAirlineName();
     console.log("airlineNames---", airlineNames?.data)
 
     console.log("Status", statusBookingFlight)
@@ -58,16 +58,16 @@ const BookFlight: React.FC = () => {
             <Header/>
             <main className='w-full h-full min-h-screen flex flex-col justify-center items-center'> 
                 {   
-                    isFetching ? 
+                    isBookFlightDataFetching || isAirlineNamesFetching ? 
                     (
                         <>
-                            <p className='text-lg mb-3'>Loading Data...</p>
+                            <p className='text-lg mb-3'>Booking...</p>
                             <span className="loader"></span>
                         </>
                     )
                     :
                     (
-                        errorBookingFlight ? 
+                        errorBookingFlight || bookFlightData?.errors?.length > 0 ? 
                         (
                             <>
                                 <p className='text-xl'>Error</p>
@@ -77,11 +77,11 @@ const BookFlight: React.FC = () => {
                         :
                         (
                              
-                            bookFlightData?.errors?.length > 0 ?
+                            bookFlightData?.errors?.status === '400'  ?
                             (
                                 <>
                                     <p className='text-xl'>Error</p>
-                                    <p>Try to book again.</p>
+                                    <p>Occurred an error booking this flight, please, review your passenger data or choose another one.</p>
                                 </>
                             ) :
                             (
