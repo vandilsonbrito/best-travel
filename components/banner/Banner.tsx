@@ -16,7 +16,7 @@ function Banner() {
    
     useEffect(() => {
         if(isSearchBtnClicked && (isInputDataFilled === false)) {
-            toast.info("Preencha todos os campos!");
+            toast.info("Fill in all the inputs correctly!");
         }
     }, [isSearchBtnClicked])
 
