@@ -4,41 +4,51 @@ import "./style.css"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-
+import useMedia from 'use-media';
 
 function Suggestions() {
 
+    const isMobile = useMedia({ maxWidth: '719px' })
+
     const suggestionsPlaces = [
         {
-            img: '/el-chaten.jpg',
+            imgDesktop: '/el-chaten.webp',
+            imgMobile: '/el-chaten-mobile.webp',
             description: 'El Chatén, Argentina'
         },
         {
-            img: '/rio-de-janeiro.jpg',
+            imgDesktop: '/rio-de-janeiro.webp',
+            imgMobile: '/rio-de-janeiro-mobile.webp',
             description: 'Rio de Janeiro, Brasil'
         },
         {
-            img: '/cinque-terre.jpg',
+            imgDesktop: '/cinque-terre.webp',
+            imgMobile: '/cinque-terre-mobile.webp',
             description: 'Cinque Terre, Italy'
         },
         {
-            img: '/tulum.jpg',
+            imgDesktop: '/tulum.webp',
+            imgMobile: '/tulum-mobile.webp',
             description: 'Tulum, Mexico'
         },
         {
-            img: '/thailand.jpg',
+            imgDesktop: '/thailand.webp',
+            imgMobile: '/thailand-mobile.webp',
             description: 'Koh Phi Phi, Thailand'
         },
         {
-            img: '/switzerland.jpg',
+            imgDesktop: '/switzerland.webp',
+            imgMobile: '/switzerland-mobile.webp',
             description: 'Lauterbrunnen, Switzerland'
         },
         {
-            img: '/pragser-wildsee.jpg',
+            imgDesktop: '/pragser-wildsee.webp',
+            imgMobile: '/pragser-wildsee-mobile.webp',
             description: 'Pragser Wildsee, Italy'
         },
         {
-            img: '/capadoccia.jpg',
+            imgDesktop: '/capadoccia.webp',
+            imgMobile: '/capadoccia-mobile.webp',
             description: 'Capadoccia, Turkey'
         },
         
@@ -77,21 +87,23 @@ function Suggestions() {
           ]
       };
 
+      console.log('isMobile ', isMobile)
+
     return (
         <section className="w-full h-full ">
             <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px-1 md:px-20 pt-14 pb-20 overflow-hidden">
                 
                 <h2 className="text-lg lg:text-[1.5rem] text-white  lg:font-semibold mb-8 text-center tracking-wide">Favorite Destinations</h2>
-                <div className="w-full h-full">
+                <div className="w-full max-w-[1350px] h-full">
                     <Slider {...settings}>
                     {
                         suggestionsPlaces.map((places, index) => (
-                            <div key={index} className="px-3">
+                            <div key={index} className="max-w-[450px] px-3">
                                 <Image 
-                                src={places.img}
+                                src={isMobile ? places.imgMobile : places.imgDesktop}
                                 alt={places.description}
-                                width={400}
-                                height={700}
+                                width={650}
+                                height={800}
                                 className="h-[450px] md:h-[500px] rounded-lg"
                                 />
                                 <p className="text-white text-center my-2">{places.description}</p>
