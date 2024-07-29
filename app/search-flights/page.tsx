@@ -63,12 +63,12 @@ const SearchFlight: React.FC = () => {
       updateIsDataResponseSuccess(isSuccess)
     }, [addFlightData, isSuccess, searchFlightsData?.data, updateIsDataResponseSuccess])
     
-    console.log(searchFlightsData?.data)
+    /* console.log(searchFlightsData?.data)
     console.log('Flights', flightData)
     console.log("ERROR", errorSearchFlight)
     console.log("---STATUSSSSS", status)
     console.log("---isLoading", isLoading)
-    console.log("---isFetching", isFetching)
+    console.log("---isFetching", isFetching) */
 
     useEffect(() => {
         if(isSearchBtnActive) {
@@ -81,11 +81,10 @@ const SearchFlight: React.FC = () => {
       if(isSearchBtnClicked && (isInputDataFilled === false)) {
           toast.info("Fill in all the inputs correctly!");
       }
-  }, [isInputDataFilled, isSearchBtnClicked])
+    }, [isInputDataFilled, isSearchBtnClicked])
 
 
     useEffect(() => {
-        console.log("TTTTTTTTTTTTTTT", isSmallScreenInputClicked)
         const formInput = document.querySelector('.form-input');
         const headerSmall = document.querySelector('.header-small-devices');
         

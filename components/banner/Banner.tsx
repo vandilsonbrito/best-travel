@@ -18,7 +18,7 @@ function Banner() {
         if(isSearchBtnClicked && (isInputDataFilled === false)) {
             toast.info("Fill in all the inputs correctly!");
         }
-    }, [isSearchBtnClicked])
+    }, [isSearchBtnClicked, isInputDataFilled])
 
     return (
         <section className='w-full h-full min-h-screen bg-heroMobile md:bg-hero bg-cover bg-no-repeat flex flex-col justify-center items-center px-4 md:px-32 lg:px-44 xl:px-14 relative '> 
