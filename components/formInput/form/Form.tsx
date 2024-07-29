@@ -4,6 +4,7 @@ import { MdPerson } from "react-icons/md";
 import useGlobalStore from '../../../utils/stores/useGlobalStore';
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { parseISO, startOfDay } from 'date-fns';
 
 interface FormProps {
     isFlightSearchPage: boolean;
@@ -60,7 +61,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         });
         
         updateIsReturnTravel(checkInputs['round-trip'])
-        console.log("CheckInputs", checkInputs['round-trip'])
+        /* console.log("CheckInputs", checkInputs) */
         return () => {
             inputsCheckbox.forEach((input) => {
                 input.removeEventListener('change', handleChange);
@@ -68,9 +69,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         };
     }, [checkInputs, updateIsReturnTravel]);
 
-    const handleReturnDateInput = (e:ChangeEvent<HTMLInputElement>) => {
-        addReturnDateInput(e.target.value);
-    }
+
     useEffect(() => {
         if(!isReturnTravel) {
             addReturnDateInput('');  
@@ -107,6 +106,54 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 updateIsSearchBtnClicked(false);
             }, 1000);
         }
+    }
+
+    const handleDateInput = function (value:string, num:number) {
+        if(!value) return;
+        const checkDate = function(value:string) {
+            let inputDate = startOfDay(parseISO(value));
+            const today = new Date();
+            inputDate.setHours(today.getHours() + 1);
+            const yearsDifference = inputDate.getFullYear() - today.getFullYear();
+            const monthsDifference = inputDate.getMonth() - today.getMonth();
+            const daysDifference = inputDate.getDate() - today.getDate();
+            /* console.log("inputDate", inputDate)
+            console.log("today", today)
+            console.log("inputDate", inputDate.getDate())
+            console.log("todayDate", today.getDate())
+            console.log("DIFERENCESS", yearsDifference)
+            console.log("DIFERENCESS", monthsDifference)
+            console.log("DIFERENCESS", daysDifference) */
+            if(yearsDifference < 0) {
+                updateIsInputDataFilled(false);
+                return
+            }
+            else if(yearsDifference > 0) {
+                num === 1 ? addDepartureDateInput(value) : addReturnDateInput(value)
+                return;
+            }
+            else {
+                if(monthsDifference < 0) {
+                    updateIsInputDataFilled(false);
+                    return;
+                }
+                else if(monthsDifference > 0) {
+                    num === 1 ? addDepartureDateInput(value) : addReturnDateInput(value)
+                    return;
+                }
+                else {
+                    if(daysDifference < 0) {
+                        updateIsInputDataFilled(false);
+                        return;
+                    }
+                    else if(daysDifference >= 0) {
+                        num === 1 ? addDepartureDateInput(value) : addReturnDateInput(value)
+                        return;
+                    }
+                }
+            }
+        }
+        checkDate(value)
     }
 
     return (
@@ -160,7 +207,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                     name="departure"
                                     id="departure"
                                     required
-                                    onChange={(e) => addDepartureDateInput(e.target.value)}
+                                    onChange={(e) => handleDateInput(e.target.value, 1)}
                                     value={departureDateInput}
                                     />
                                 </div>
@@ -172,7 +219,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                     name="arrive"
                                     id="arrive"
                                     required={isReturnTravel}
-                                    onChange={(e) => handleReturnDateInput(e)}
+                                    onChange={(e) => handleDateInput(e.target.value, 2)}
                                     value={returnDateInput}
                                     />
                                 </div>
@@ -187,7 +234,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 name="departure"
                                 id="departure"
                                 required
-                                onChange={(e) => addDepartureDateInput(e.target.value)}
+                                onChange={(e) => handleDateInput(e.target.value, 1)}
                                 value={departureDateInput}
                                 />
                             </div>
@@ -199,7 +246,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 name="arrive"
                                 id="arrive"
                                 required={isReturnTravel}
-                                onChange={(e) => addReturnDateInput(e.target.value)}
+                                onChange={(e) => handleDateInput(e.target.value, 2)}
                                 value={returnDateInput}
                                 />
                             </div>
