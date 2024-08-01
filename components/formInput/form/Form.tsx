@@ -5,6 +5,7 @@ import useGlobalStore from '../../../utils/stores/useGlobalStore';
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseISO, startOfDay } from 'date-fns';
+import Autocomplete from "../../autocomplete/Autocomplete";
 
 interface FormProps {
     isFlightSearchPage: boolean;
@@ -31,13 +32,16 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         updateIsInputDataFilled: state.updateIsInputDataFilled,
         updateIsSearchBtnClicked: state.updateIsSearchBtnClicked
     }))
+    const [isLocationInputFromOnFocus, setIsLocationInputFromOnFocus] = useState<boolean>(false);
+    const [isLocationInputToOnFocus, setIsLocationInputToOnFocus] = useState<boolean>(false);
+
     const router = useRouter();
 
+    /* check inputs */
     const [checkInputs, setCheckInputs] = useState<{ [key: string]: boolean }>({
         'one-way': isReturnTravel === false ? true : false,
         'round-trip': isReturnTravel === true ? true : false,
     });
-    
     useEffect(() => {
         const inputsCheckbox = document.querySelectorAll("input[type='checkbox']") as NodeListOf<HTMLInputElement>;
         inputsCheckbox.forEach((input) => {
@@ -75,6 +79,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
             addReturnDateInput('');  
         }
     }, [addReturnDateInput, isReturnTravel]) 
+
 
     const handleSearchBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -171,31 +176,41 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 <div className="w-full h-full flex flex-col gap-3 mt-3">
                     <div className="w-full h-[85%] sm:h-[90%] xl:h-full flex flex-col xl:flex-row items-start gap-3">
                         <div className="w-full h-full flex flex-wrap xl:flex-row justify-center xl:justify-start gap-3">
-                            <div className={`w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
-                                <label htmlFor="from" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">From</label >
-                                <input
-                                className="w-full py-1 outline-none text-sm"
-                                type="text"
-                                name="from"
-                                id="from"
-                                placeholder="London"
-                                required
-                                onChange={(e) => addLocationInputFrom(e.target.value)}
-                                value={locationInputFrom}
-                                />
+                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
+                                <div className="absolute top-[2px]">
+                                    <label htmlFor="from" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">From</label >
+                                    <input
+                                    className="w-full py-1 outline-none text-sm"
+                                    type="text"
+                                    name="from"
+                                    id="from"
+                                    placeholder="London"
+                                    required
+                                    onChange={(e) => addLocationInputFrom(e.target.value)}
+                                    onFocus={() => setIsLocationInputFromOnFocus(true)}
+                                    onBlur={() => setTimeout(() => setIsLocationInputFromOnFocus(false), 100)}
+                                    value={locationInputFrom}
+                                    />
+                                </div>  
+                                <Autocomplete isLocationInputFromOnFocus={isLocationInputFromOnFocus} isLocationInputToOnFocus={isLocationInputToOnFocus}locationInputFrom={locationInputFrom}/>
                             </div>
-                            <div className={`w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
-                                <label htmlFor="to" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">To</label >
-                                <input
-                                className="w-full py-1 outline-none text-sm"
-                                type="text"
-                                name="to"
-                                id="to"
-                                placeholder="São Paulo"
-                                required
-                                onChange={(e) => addLocationInputTo(e.target.value)}
-                                value={locationInputTo}
-                                />
+                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
+                                <div className="absolute top-[2px]">
+                                    <label htmlFor="to" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">To</label >
+                                    <input
+                                    className="w-full py-1 outline-none text-sm"
+                                    type="text"
+                                    name="to"
+                                    id="to"
+                                    placeholder="São Paulo"
+                                    required
+                                    onChange={(e) => addLocationInputTo(e.target.value)}
+                                    onFocus={() => setIsLocationInputToOnFocus(true)}
+                                    onBlur={() => setTimeout(() => setIsLocationInputToOnFocus(false), 100)}
+                                    value={locationInputTo}
+                                    />
+                                </div>
+                                <Autocomplete isLocationInputToOnFocus={isLocationInputToOnFocus} isLocationInputFromOnFocus={isLocationInputFromOnFocus} locationInputTo={locationInputTo}/>
                             </div>
                             {/* small screens */}
                             <div className="w-full h-[3.2rem] px-2 pt-1 lg:pt-2 bg-white flex justify-between items-center xl:hidden  rounded-md">
