@@ -11,8 +11,15 @@ interface AmadeusTokenResponse {
 export async function GET(req: NextRequest) {
   const API_KEY = process.env.AMADEUS_API_KEY as string;
   const API_SECRET = process.env.AMADEUS_API_SECRET as string;
+  const TOKEN_ACCESS_ENV = process.env.NEXT_PUBLIC_ROUTE_ACCESS_TOKEN as string;
 
   const tokenUrl = 'https://test.api.amadeus.com/v1/security/oauth2/token';
+
+  const accessRouteToken = req.headers.get('Authorization')?.split(' ')[1];
+  if (!accessRouteToken || accessRouteToken !== TOKEN_ACCESS_ENV) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
 
   const params = new URLSearchParams();
   params.append('grant_type', 'client_credentials');
