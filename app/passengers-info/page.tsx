@@ -15,8 +15,6 @@ const PassengersInfo: React.FC = () => {
     const { data:flightOfferData, error, status } = useFlightOfferConfirm();
     const { data:countryInfo } = useCountryInfo()
 
-    console.log("###COUNTRY---INFO####", countryInfo?.[0]?.nome?.['abreviado-EN'])
-
     const [confirmedFlightOfferData, setConfirmedFlightOfferData] = useState<any>([]);
     const { updateAccessToken, travelersInput, updatePassengerInfo, passengerInfo, choseFlight, updateCarrierCode, updatePassengerBirthPlace } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
@@ -29,12 +27,11 @@ const PassengersInfo: React.FC = () => {
     }));
     
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-    console.log("FORMErrorrrrrrrrr", errors)
 
     const onSubmit = (data: any) => {
         updatePassengerInfo(data);
         router.push('/book-flight');
-        console.log("ReactHookForm---------------------", data);
+        /* console.log("ReactHookForm---------------------", data); */
     };
 
     useEffect(() => {
@@ -71,15 +68,15 @@ const PassengersInfo: React.FC = () => {
             const allCarrierCodes = choseFlight?.itineraries?.flatMap((itinerary: any) => 
                     itinerary.segments.map((segment: any) => segment.carrierCode)
             )
-            console.log("allCarrierCodeSSSSSSSS", Array.from(new Set(allCarrierCodes)));
+           
             updateCarrierCode(Array.from(new Set(allCarrierCodes)));
         }
     }, [accessTokenData, choseFlight, updateCarrierCode]);
 
-    console.log("Status", status);
+    /* console.log("Status", status);
     console.log("errorBookingFlight", error);
     console.log("Warnings", flightOfferData?.warnings?.[0]);
-    console.log("TravelersNumber", travelersInput);
+    console.log("TravelersNumber", travelersInput); */
 
     return (
         <main>

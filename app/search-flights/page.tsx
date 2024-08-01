@@ -63,9 +63,9 @@ const SearchFlight: React.FC = () => {
       updateIsDataResponseSuccess(isSuccess)
     }, [addFlightData, isSuccess, searchFlightsData?.data, updateIsDataResponseSuccess])
     
-    /* console.log(searchFlightsData?.data)
     console.log('Flights', flightData)
     console.log("ERROR", errorSearchFlight)
+    /* console.log(searchFlightsData?.data)
     console.log("---STATUSSSSS", status)
     console.log("---isLoading", isLoading)
     console.log("---isFetching", isFetching) */

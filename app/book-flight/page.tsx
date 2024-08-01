@@ -34,12 +34,13 @@ const BookFlight: React.FC = () => {
 
     
     const { data:airlineNames, isFetching:isAirlineNamesFetching } = useAirlineName();
-    console.log("airlineNames---", airlineNames?.data)
-
+    /* console.log("airlineNames---", airlineNames?.data)
     console.log("Status", statusBookingFlight)
     console.log("errorBookingFlight", errorBookingFlight)
     console.log("bookData", bookFlightData)
     console.log("FLIGHTOfferDATA", flightOfferData)
+    console.log("statusBookingFlight", statusBookingFlight)
+    console.log("---------carrierCode", carrierCode) */
 
     interface Traveler {
         gender: 'MALE' | 'FEMALE';
@@ -48,9 +49,6 @@ const BookFlight: React.FC = () => {
           lastName: string;
         };
     }
-    
-    console.log("statusBookingFlight", statusBookingFlight)
-    console.log("---------carrierCode", carrierCode)
 
     return (
         <>  
