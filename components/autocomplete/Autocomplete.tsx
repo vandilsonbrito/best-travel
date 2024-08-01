@@ -87,7 +87,7 @@ function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, lo
   }
 
   return (
-    <div className={`${((isLocationInputFromOnFocus && locationInputFrom) || (isLocationInputToOnFocus && locationInputTo)) ? 'visible' : 'hidden'} text-black bg-white w-[13rem] h-[13rem] overflow-y-scroll z-50 absolute top-[3.6rem] left-0`}> 
+    <div className={`${((isLocationInputFromOnFocus && locationInputFrom && strMatched.length > 0) || (isLocationInputToOnFocus && locationInputTo && strMatched.length > 0)) ? 'visible' : 'hidden'} text-black bg-white w-[13rem] h-[13rem] overflow-y-scroll z-50 absolute top-[3.6rem] left-0  scrollable-container`}> 
         { strMatched.map(({ IATA, name, city, country }, index) => ( 
           (
             <div key={index} tabIndex={index} className="autocomplete-result hover:bg-slate-100" onClick={() => handleSelectedAirport(IATA)}>
