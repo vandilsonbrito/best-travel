@@ -13,23 +13,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-      </Head>
-        <body className={montserrat.className}>
-            <ReactQueryProvider>  
-              <link rel="icon" href="/favicon.ico" sizes="any" />
-              {children}
-            </ReactQueryProvider>
-        </body>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
+      <body className={montserrat.className}>
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }

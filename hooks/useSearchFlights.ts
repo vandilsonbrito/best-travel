@@ -107,6 +107,5 @@ export function useSearchFlights() {
         enabled: !!accessToken && isInputDataFilled,
         
     }); 
-    console.log("!!accessToken && isInputDataFilled", !!accessToken && isInputDataFilled)
     return query;
 }
