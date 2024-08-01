@@ -1,5 +1,4 @@
-// pages/api/auth.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
 interface AmadeusTokenResponse {
@@ -9,7 +8,7 @@ interface AmadeusTokenResponse {
   state: string;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   const API_KEY = process.env.AMADEUS_API_KEY as string;
   const API_SECRET = process.env.AMADEUS_API_SECRET as string;
 
@@ -22,14 +21,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const response = await axios.post<AmadeusTokenResponse>(tokenUrl, params, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     const accessToken = response.data.access_token;
-    res.status(200).json({ accessToken });
+    return NextResponse.json({ accessToken });
   } catch (error) {
     console.error('Error obtaining access token:', error);
-    res.status(500).json({ error: 'Error obtaining access token' });
+    return NextResponse.json({ error: 'Error obtaining access token' }, { status: 500 });
   }
 }
