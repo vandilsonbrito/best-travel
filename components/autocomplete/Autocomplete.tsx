@@ -51,8 +51,8 @@ function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, lo
       maxPatternLength: 32,
       keys: [
         { name: 'IATA', weight: 0.5 },
-        { name: 'name', weight: 0.3 },
-        { name: 'city', weight: 0.2 }
+        { name: 'city', weight: 0.3 },
+        { name: 'country', weight: 0.2 }
       ]
     }
     return new Fuse(airports, options);
@@ -87,7 +87,7 @@ function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, lo
   }
 
   return (
-    <div className={`${((isLocationInputFromOnFocus && locationInputFrom && strMatched.length > 0) || (isLocationInputToOnFocus && locationInputTo && strMatched.length > 0)) ? 'visible' : 'hidden'} text-black bg-white w-[13rem] h-[13rem] overflow-y-scroll z-50 absolute top-[3.6rem] left-0  scrollable-container`}> 
+    <div className={`${((isLocationInputFromOnFocus && locationInputFrom && strMatched.length > 0) || (isLocationInputToOnFocus && locationInputTo && strMatched.length > 0)) ? 'visible' : 'hidden'} text-black bg-white w-[19.4rem] lg:w-[15.5rem] h-[13rem] overflow-y-scroll z-50 absolute top-[3.1rem] lg:top-[3.6rem] left-0 shadow-xl  scrollable-container`}> 
         { strMatched.map(({ IATA, name, city, country }, index) => ( 
           (
             <div key={index} tabIndex={index} className="autocomplete-result hover:bg-slate-100" onClick={() => handleSelectedAirport(IATA)}>
