@@ -176,11 +176,11 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 <div className="w-full h-full flex flex-col gap-3 mt-3">
                     <div className="w-full h-[85%] sm:h-[90%] xl:h-full flex flex-col xl:flex-row items-start gap-3">
                         <div className="w-full h-full flex flex-wrap xl:flex-row justify-center xl:justify-start gap-3">
-                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
-                                <div className="absolute -top-[2px] lg:top-[2px]">
+                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md `}>
+                                <div className="w-full absolute -top-[2px] lg:top-[2px]">
                                     <label htmlFor="from" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">From</label>
                                     <input
-                                    className="w-full py-1 outline-none text-sm"
+                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm"
                                     type="text"
                                     name="from"
                                     id="from"
@@ -194,11 +194,11 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 </div>  
                                 <Autocomplete isLocationInputFromOnFocus={isLocationInputFromOnFocus} isLocationInputToOnFocus={isLocationInputToOnFocus}locationInputFrom={locationInputFrom}/>
                             </div>
-                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md`}>
-                                <div className="absolute -top-[2px] lg:top-[2px]">
+                            <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md `}>
+                                <div className="w-full absolute -top-[2px] lg:top-[2px]">
                                     <label htmlFor="to" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">To</label >
                                     <input
-                                    className="w-full py-1 outline-none text-sm"
+                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm"
                                     type="text"
                                     name="to"
                                     id="to"
