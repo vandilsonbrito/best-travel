@@ -25,7 +25,7 @@ export default function RootLayout({
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} bg-white`}>
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
