@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import useGlobalStore from '../utils/stores/useGlobalStore';
 
-export function useSearchFlights() {
+export function useSearchFlights(limitOffers:number) {
 
     const { accessToken, locationInputFrom, locationInputTo, departureDateInput, returnDateInput, travelersInput, isReturnTravel, isInputDataFilled } = useGlobalStore((state) => ({
         accessToken: state.accessToken,
@@ -13,7 +13,6 @@ export function useSearchFlights() {
         isReturnTravel: state.isReturnTravel,
         isInputDataFilled: state.isInputDataFilled
     }))
-
 
     const travelStyle = {
       'false': [
@@ -79,7 +78,7 @@ export function useSearchFlights() {
                 travelers: travelersHelper(),
                 sources: ["GDS"],
                 searchCriteria: {
-                    maxFlightOffers: 5,
+                    maxFlightOffers: limitOffers,
                     flightFilters: {
                         cabinRestrictions: [
                         {
@@ -105,7 +104,7 @@ export function useSearchFlights() {
         queryFn: fetchFlights,
         queryKey: ['flights-data'],
         enabled: !!accessToken && isInputDataFilled,
-        
+        placeholderData: keepPreviousData,
     }); 
     return query;
 }
