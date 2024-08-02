@@ -31,6 +31,7 @@ const SearchFlight: React.FC = () => {
         updateChoseFlight: state.updateChoseFlight,
         
     }));
+    const [limitFlightOffers, setLimitFlightOffers] = useState<number>(8);
 
 
     interface queryResult {
@@ -44,8 +45,7 @@ const SearchFlight: React.FC = () => {
       status: any
     }
     const { data:accessTokenData } = useGetAccesToken() as queryResult;
-    const {  data:searchFlightsData, error:errorSearchFlight, status, isPending, isLoading, isFetching, isSuccess,
-    refetch } = useSearchFlights() as queryResult;
+    const {  data:searchFlightsData, error:errorSearchFlight, status, isPending, isLoading, isFetching, isSuccess, refetch } = useSearchFlights(limitFlightOffers) as queryResult;
     
     useEffect(() => {
         console.log("Clicou Button to search")
@@ -63,12 +63,12 @@ const SearchFlight: React.FC = () => {
       updateIsDataResponseSuccess(isSuccess)
     }, [addFlightData, isSuccess, searchFlightsData?.data, updateIsDataResponseSuccess])
     
-    console.log('Flights', flightData)
+    /* console.log('Flights', flightData)
     console.log("ERROR", errorSearchFlight)
+    console.log("---isFetching", isFetching) */ 
     /* console.log(searchFlightsData?.data)
     console.log("---STATUSSSSS", status)
-    console.log("---isLoading", isLoading)
-    console.log("---isFetching", isFetching) */
+    console.log("---isLoading", isLoading) */
 
     useEffect(() => {
         if(isSearchBtnActive) {
@@ -121,13 +121,16 @@ const SearchFlight: React.FC = () => {
     }, [isSmallScreenInputClicked])
    
     const handleBookClick = (index:number) => {
-      console.log("handleBookClicked", index)
       updateChoseFlight(flightData[index])
     }
     
+    const handleMoreResultsClick = () => {
+      setLimitFlightOffers(limitFlightOffers + 10);
+      setTimeout(()=> refetch(), 100)
+    }
 
     return (
-        <main className='w-full h-full'>
+        <main className='w-full h-full '>
             <ToastContainer/>
             <HeaderSmallDevices className={`header-small-devices  w-full h-full flex flex-col gap-1 sticky top-0 z-50 bg-secundary p-7  sm:hidden`}/>
     
@@ -142,8 +145,12 @@ const SearchFlight: React.FC = () => {
                         <CardSkeleton/>
                         <CardSkeleton/>
                         <CardSkeleton/>
+                        <CardSkeleton/>
+                        <CardSkeleton/>
                       </div>
                       <div className="flex flex-col gap-3 sm:hidden">
+                        <CardSkeletonSmallScreen/>
+                        <CardSkeletonSmallScreen/>
                         <CardSkeletonSmallScreen/>
                         <CardSkeletonSmallScreen/>
                         <CardSkeletonSmallScreen/>
@@ -160,33 +167,49 @@ const SearchFlight: React.FC = () => {
                             </>
                           
                       ) : ( 
+                        <>
+                          { flightData?.length > 0 ? (
                             <>
-                                { flightData?.length > 0 ? (
-                                flightData?.map((flight: any, index: number) => (
-                                  <li
-                                    key={index}
-                                    className="w-full max-w-[800px] flex flex-col sm:flex-row  justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2"
-                                  >
-                                    <FlightDetails flight={flight} />
-                                    <div className={`w-72 h-full pl-2 ${(flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1) ? 'min-h-[11rem] sm:min-h-[24rem]' : 'min-h-40 sm:min-h-52'} flex flex-col justify-center items-center gap-2`}>
-                                      <p className="text-lg font-semibold">
-                                        {flight.price.currency} {flight.price.base}
-                                      </p>
-                                      <Link
-                                        href="/passengers-info"
-                                        className="px-[4.5rem] py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
-                                        onClick={() => handleBookClick(index)}
+                                <ul className="list-none p-0">
+                                    {flightData.map((flight: any, index: number) => (
+                                      <li
+                                        key={index}
+                                        className="w-full max-w-[800px] flex flex-col sm:flex-row justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2 mb-4" 
                                       >
-                                        Book
-                                      </Link>
-                                    </div>
-                                  </li>
-                                ))
-                              ) : (
-                                <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
-                              )}
-                            
-                          </> 
+                                        <FlightDetails flight={flight} />
+                                        <div
+                                          className={`w-72 h-full pl-2 ${
+                                            flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1
+                                              ? 'min-h-[11rem] sm:min-h-[24rem]'
+                                              : 'min-h-40 sm:min-h-52'
+                                          } flex flex-col justify-center items-center gap-2`}
+                                        >
+                                          <p className="text-lg font-semibold">
+                                            {flight.price.currency} {flight.price.base}
+                                          </p>
+                                          <Link
+                                            href="/passengers-info"
+                                            className="px-[4.5rem] py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
+                                            onClick={() => handleBookClick(index)}
+                                          >
+                                            Book
+                                          </Link>
+                                        </div>
+                                      </li>
+                                    ))}
+                                </ul>
+                                <div className="w-full flex justify-center items-center py-5">
+                                  <button 
+                                    className="w-52 h-[4rem] lg:h-[3.8rem] px-2 bg-primary border-2 border-slate-300 text-white font-medium text-lg rounded-md text-center hover:shadow-2xl active:scale-[.98] ease-in-out"
+                                    onClick={() => handleMoreResultsClick()}
+                                    >See More</button>
+                                </div>
+                            </>
+                          ) : (
+                            <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                          )}
+                      </>
+                      
                           ) 
                       }
                     </>
