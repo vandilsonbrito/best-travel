@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { MdPerson } from "react-icons/md";
 import useGlobalStore from '../../../utils/stores/useGlobalStore';
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseISO, startOfDay } from 'date-fns';
 import Autocomplete from "../../autocomplete/Autocomplete";
@@ -13,7 +13,7 @@ interface FormProps {
 
 export default function Form({ isFlightSearchPage }: FormProps) {
 
-    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked } = useGlobalStore((state:any) => ({
+    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked, updateShouldLocationInputBlur, shouldLocationInputBlur } = useGlobalStore((state:any) => ({
         locationInputFrom: state.locationInputFrom,
         addLocationInputFrom: state.addLocationInputFrom,
         locationInputTo: state.locationInputTo,
@@ -30,10 +30,13 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked, 
         isReturnTravel: state.isReturnTravel, 
         updateIsInputDataFilled: state.updateIsInputDataFilled,
-        updateIsSearchBtnClicked: state.updateIsSearchBtnClicked
+        updateIsSearchBtnClicked: state.updateIsSearchBtnClicked,
+        updateShouldLocationInputBlur: state.updateShouldLocationInputBlur,
+        shouldLocationInputBlur: state.shouldLocationInputBlur
     }))
     const [isLocationInputFromOnFocus, setIsLocationInputFromOnFocus] = useState<boolean>(false);
     const [isLocationInputToOnFocus, setIsLocationInputToOnFocus] = useState<boolean>(false);
+    const inputRefLocation = useRef<HTMLInputElement>(null);
 
     const router = useRouter();
 
@@ -65,7 +68,6 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         });
         
         updateIsReturnTravel(checkInputs['round-trip'])
-        /* console.log("CheckInputs", checkInputs) */
         return () => {
             inputsCheckbox.forEach((input) => {
                 input.removeEventListener('change', handleChange);
@@ -161,6 +163,16 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         checkDate(value)
     }
 
+    useEffect(() => {
+        if(shouldLocationInputBlur && inputRefLocation.current) {
+            inputRefLocation.current.blur();
+            setIsLocationInputFromOnFocus(false);
+            setIsLocationInputToOnFocus(false);
+            updateShouldLocationInputBlur(false);
+            
+        }
+    }, [shouldLocationInputBlur, setIsLocationInputFromOnFocus])
+
     return (
         <form className="w-full h-full max-w-[1300px]">
                 <div className="w-full flex justify-start items-start gap-5 mt-8">
@@ -182,17 +194,17 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                     <input
                                     className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm"
                                     type="text"
-                                    name="from"
+                                    name="from" 
                                     id="from"
                                     placeholder="London"
                                     required
-                                    onChange={(e) => addLocationInputFrom(e.target.value)}
+                                    onChange={(e) => addLocationInputFrom((e.target.value).toUpperCase())}
                                     onFocus={() => setIsLocationInputFromOnFocus(true)}
-                                    onBlur={() => setTimeout(() => setIsLocationInputFromOnFocus(false), 100)}
+                                    ref={inputRefLocation}
                                     value={locationInputFrom}
                                     />
                                 </div>  
-                                <Autocomplete isLocationInputFromOnFocus={isLocationInputFromOnFocus} isLocationInputToOnFocus={isLocationInputToOnFocus}locationInputFrom={locationInputFrom}/>
+                                <Autocomplete isLocationInputFromOnFocus={isLocationInputFromOnFocus} isLocationInputToOnFocus={isLocationInputToOnFocus} locationInputFrom={locationInputFrom}/>
                             </div>
                             <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md `}>
                                 <div className="w-full absolute -top-[2px] lg:top-[2px]">
@@ -204,9 +216,9 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                     id="to"
                                     placeholder="São Paulo"
                                     required
-                                    onChange={(e) => addLocationInputTo(e.target.value)}
+                                    onChange={(e) => addLocationInputTo((e.target.value).toUpperCase())}
                                     onFocus={() => setIsLocationInputToOnFocus(true)}
-                                    onBlur={() => setTimeout(() => setIsLocationInputToOnFocus(false), 100)}
+                                    ref={inputRefLocation}
                                     value={locationInputTo}
                                     />
                                 </div>
