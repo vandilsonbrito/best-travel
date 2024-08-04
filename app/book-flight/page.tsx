@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useBookFlight } from '../../hooks/useBookFlight';
 import { useGetAccesToken } from '../../hooks/useGetAccesToken';
 import { useFlightOfferConfirm } from '../../hooks/useFlightOfferConfirm';
+import { useSendBookingEmail } from '../../hooks/useSendBookingEmail';
 import useGlobalStore from '../../utils/stores/useGlobalStore';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -12,7 +13,11 @@ import PreventBackNavigation from '../../components/preventBackNavigation/Preven
 
 const BookFlight: React.FC = () => {
 
-    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput, carrierCode,  } = useGlobalStore((state) => ({
+    const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
+    useEffect(() => {
+      setIsEmailSent(!!sessionStorage.getItem('isEmailSent') || false)
+    }, [])
+    const { updateAccessToken, updateFlightBooked, flightBooked, departureDateInput, returnDateInput, carrierCode  } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         updateFlightBooked: state.updateFlightBooked,
         flightBooked: state.flightBooked,
@@ -28,16 +33,28 @@ const BookFlight: React.FC = () => {
 
     const { data:flightOfferData, error, status } = useFlightOfferConfirm();
     const { data:bookFlightData, error:errorBookingFlight, status:statusBookingFlight, isFetching:isBookFlightDataFetching } = useBookFlight();
-    useEffect(() => {
-        updateFlightBooked(bookFlightData?.data)
-    }, [accessTokenData, bookFlightData?.data, updateFlightBooked])
+    const { data:airlineNames, isFetching:isAirlineNamesFetching } = useAirlineName();
+    const { sendBookingEmail } = useSendBookingEmail();
 
     
-    const { data:airlineNames, isFetching:isAirlineNamesFetching } = useAirlineName();
+    useEffect(() => {
+        updateFlightBooked(bookFlightData?.data);
+        
+        if(bookFlightData?.data && airlineNames && !isEmailSent) {
+          setIsEmailSent(true);
+          setTimeout(() => {
+            sendBookingEmail(bookFlightData, airlineNames);
+            sessionStorage.setItem('isEmailSent', 'true');
+          }, 200);
+        }
+    }, [accessTokenData, bookFlightData, sendBookingEmail, updateFlightBooked, isEmailSent, airlineNames])
+
+    
+
     /* console.log("airlineNames---", airlineNames?.data)
+    console.log("bookData", bookFlightData)
     console.log("Status", statusBookingFlight)
     console.log("errorBookingFlight", errorBookingFlight)
-    console.log("bookData", bookFlightData)
     console.log("FLIGHTOfferDATA", flightOfferData)
     console.log("statusBookingFlight", statusBookingFlight)
     console.log("---------carrierCode", carrierCode) */
@@ -102,6 +119,7 @@ const BookFlight: React.FC = () => {
                                             <p>Airline(s): 
                                                 <span className='font-semibold'>{' ' + (airlineNames?.data?.map((airline:any) => ` ${airline?.commonName}` ) || '----')}</span>
                                             </p>
+                                            <p className={`text-base py-2 ${isEmailSent ? 'visible' : 'hidden'}`}>Check your email!</p>
                                         </div>
                                         <div className="w-full flex items-center justify-center">
                                             {
