@@ -29,38 +29,40 @@ type State = {
     passengerInfo: any,
     flightBooked: any,
     carrierCode: string[],
-    passengerBirthPlace: string[]
+    passengerBirthPlace: string[], 
+    shouldLocationInputBlur: boolean
 }
 type Action = {
-    updateAccessToken: (accessToken: State['accessToken']) => void,
-    addFlightData: (flightData: any) => void,
-    addDepartureTime: (departureTime: string) => void,
-    addArrivalTime: (arrivalTime: string) => void,
-    addDepartureiataCode: (departureiataCode: string) => void,
-    addArrivalIataCode: (addArrivalIataCode: string) => void,
-    addFlightItineraries: (flightItineraries: string) => void,
-    addFlightDuration: (flightItineraries: string) => void,
-    addFlightPrice: (flightPrice:string) => void,
-    addFlightPriceCurrency: (flightPriceCurrency:string) => void,
-    addAirlinesLogo: (AddAirlinesLogo:string) => void,
-    addCarriersCode: (AddCarriersCode:string) => void,
-    addLocationInputFrom: (AddLocationInputFrom:string) => void,
-    addLocationInputTo: (AddLocationInputTo:string) => void,
-    addLocationResponseData: (addLocationResponseData:string) => void,
-    addDepartureDateInput: (addDepartureDateInput:string) => void,
-    addReturnDateInput: (addReturnDateInput:string) => void,
-    addTravelersInput: (addTravelersInput:string) => void,
-    updateIsReturnTravel: (updateIsReturnTravel:boolean) => void,
-    updateIsSearchBtnActive: (updateIsSearchBtnActive:boolean) => void,
-    updateIsSearchBtnClicked: (updateIsSearchBtnClicked:boolean) => void,
-    updateIsSmallScreenInputClicked: (updateIsSmallScreenInputClicked:boolean) => void,
-    updateIsDataResponseSuccess:  (updateIsDataResponseSuccess:boolean) => void,
-    updateIsInputDataFilled: (updateIsInputDataFilled:boolean) => void,
-    updateChoseFlight: (updateChoseFlight: any) => void,
-    updatePassengerInfo: (updatePassengerInfo: any) => void,
-    updateFlightBooked: (updateFlightBooked: any) => void,
-    updateCarrierCode: (updateCarrierCode: any) => void,
-    updatePassengerBirthPlace: (updatePassengerBirthPlace: any) => void,
+    updateAccessToken: (accessToken: State['accessToken']) => void;
+    addFlightData: (flightData: State['flightData']) => void;
+    addDepartureTime: (departureTime: State['departureTime'][number]) => void;
+    addArrivalTime: (arrivalTime: State['arrivalTime'][number]) => void;
+    addDepartureiataCode: (departureiataCode: State['departureiataCode'][number]) => void;
+    addArrivalIataCode: (arrivalIataCode: State['arrivalIataCode'][number]) => void;
+    addFlightItineraries: (flightItineraries: State['flightItineraries'][number]) => void;
+    addFlightDuration: (flightDuration: State['flightDuration'][number]) => void;
+    addFlightPrice: (flightPrice: State['flightPrice'][number]) => void;
+    addFlightPriceCurrency: (flightPriceCurrency: State['flightPriceCurrency'][number]) => void;
+    addAirlinesLogo: (airlinesLogo: State['airlinesLogo'][number]) => void;
+    addCarriersCode: (carriersCode: State['carriersCode'][number]) => void;
+    addLocationInputFrom: (locationInputFrom: State['locationInputFrom']) => void;
+    addLocationInputTo: (locationInputTo: State['locationInputTo']) => void;
+    addLocationResponseData: (locationResponseData: State['locationResponseData'][number]) => void;
+    addDepartureDateInput: (departureDateInput: State['departureDateInput']) => void;
+    addReturnDateInput: (returnDateInput: State['returnDateInput']) => void;
+    addTravelersInput: (travelersInput: State['travelersInput']) => void;
+    updateIsReturnTravel: (isReturnTravel: State['isReturnTravel']) => void;
+    updateIsSearchBtnActive: (isSearchBtnActive: State['isSearchBtnActive']) => void;
+    updateIsSearchBtnClicked: (isSearchBtnClicked: State['isSearchBtnClicked']) => void;
+    updateIsSmallScreenInputClicked: (isSmallScreenInputClicked: State['isSmallScreenInputClicked']) => void;
+    updateIsDataResponseSuccess: (isDataResponseSuccess: State['isDataResponseSuccess']) => void;
+    updateIsInputDataFilled: (isInputDataFilled: State['isInputDataFilled']) => void;
+    updateChoseFlight: (choseFlight: State['choseFlight']) => void;
+    updatePassengerInfo: (passengerInfo: State['passengerInfo']) => void;
+    updateFlightBooked: (flightBooked: State['flightBooked']) => void;
+    updateCarrierCode: (carrierCode: State['carrierCode']) => void;
+    updatePassengerBirthPlace: (passengerBirthPlace: State['passengerBirthPlace']) => void;
+    updateShouldLocationInputBlur: (shouldLocationInputBlur: State['shouldLocationInputBlur']) => void;
 }
 const useGlobalStore = create<State & Action>((set) => ({
     accessToken: '',
@@ -120,7 +122,9 @@ const useGlobalStore = create<State & Action>((set) => ({
     carrierCode: [],
     updateCarrierCode: (carrierCode) => set(() => ({ carrierCode: carrierCode })),
     passengerBirthPlace: [],
-    updatePassengerBirthPlace: (carrierCode) => set((state) => ({ ...state, carrierCode: [...state.carrierCode, carrierCode] }))
+    updatePassengerBirthPlace: (passengerBirthPlace: string[]) => set((state) => ({ ...state, passengerBirthPlace })),
+    shouldLocationInputBlur: false,
+    updateShouldLocationInputBlur: (shouldLocationInputBlur) => set(() => ({ shouldLocationInputBlur: shouldLocationInputBlur }))
 }))
 export default useGlobalStore;
 
