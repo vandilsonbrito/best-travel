@@ -20,8 +20,6 @@ export function useCountryInfo() {
         }
       }
 
-    console.log("----COUNTRY--INFO----", getCountryInfo())
-
     const query = useQuery({
         queryFn: getCountryInfo,
         queryKey: ['country-name'],

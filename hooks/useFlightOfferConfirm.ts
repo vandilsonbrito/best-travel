@@ -7,9 +7,6 @@ export function useFlightOfferConfirm() {
         choseFlight: state.choseFlight
     }));
 
-    console.log("Token", accessToken)
-    console.log("ChoseFlight", choseFlight);
-
     const fetchOfferConfirm = async () => {
         try {
             const response = await fetch('https://test.api.amadeus.com/v1/shopping/flight-offers/pricing', {

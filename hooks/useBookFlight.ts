@@ -10,11 +10,9 @@ export function useBookFlight() {
         passengerBirthPlace: state.passengerBirthPlace
     }));
 
-    console.log("Token", accessToken)
-    console.log("ChoseFlight", choseFlight);
-    console.log("passengerInfo-------", passengerInfo);
 
-    
+    /* console.log("ChoseFlight", choseFlight);
+    console.log("passengerInfo-------", passengerInfo); */
 
     let passengersInformation = [];
     const passengerInformationModel = (passengerInfo:any, travelersInput:string) => {
@@ -53,7 +51,6 @@ export function useBookFlight() {
                   }
                 ]
               }
-              console.log("----------FillingInfo", fillInfo)
               passengersInformation.push(fillInfo);
               index++;
         }
@@ -62,7 +59,7 @@ export function useBookFlight() {
 
     
     const passengersInformationCompleted = passengerInformationModel(passengerInfo, travelersInput)
-    console.log("----------ARRAY", passengersInformationCompleted)
+  
     const fetchOfferConfirm = async () => {
         try {
             const response = await fetch('https://test.api.amadeus.com/v1/booking/flight-orders', {

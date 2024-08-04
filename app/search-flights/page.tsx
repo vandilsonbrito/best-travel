@@ -48,7 +48,6 @@ const SearchFlight: React.FC = () => {
     const {  data:searchFlightsData, error:errorSearchFlight, status, isPending, isLoading, isFetching, isSuccess, refetch } = useSearchFlights(limitFlightOffers) as queryResult;
     
     useEffect(() => {
-        console.log("Clicou Button to search")
         if(!isInputDataFilled) {
           toast.info("Preencha todos os campos!");
         }
@@ -90,14 +89,14 @@ const SearchFlight: React.FC = () => {
         
         if(window.innerWidth < 700) {
             if(isSmallScreenInputClicked && formInput?.classList.contains('hidden')) {
-              console.log("Primeiro IF")
+              /* console.log("Primeiro IF") */
               formInput?.classList.remove('hidden');
               formInput?.classList.add('visible');
               headerSmall?.classList.remove('visible');
               headerSmall?.classList.add('hidden');
             }
             else if(!isSmallScreenInputClicked && formInput?.classList.contains('visible')) {
-              console.log("Segundo IF")
+              /* console.log("Segundo IF") */
               formInput?.classList.remove('visible');
               formInput?.classList.add('hidden');
               headerSmall?.classList.remove('hidden');
@@ -116,7 +115,7 @@ const SearchFlight: React.FC = () => {
                 }
               }) */
             }
-            console.log("FormInput está VISIBLE", formInput?.classList.contains('visible'))
+            /* console.log("FormInput está VISIBLE", formInput?.classList.contains('visible')) */
         }
     }, [isSmallScreenInputClicked])
    

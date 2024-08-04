@@ -87,7 +87,6 @@ function Suggestions() {
           ]
       };
 
-      console.log('isMobile ', isMobile)
 
     return (
         <section className="w-full h-full ">
