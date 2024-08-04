@@ -24,9 +24,10 @@ type AtLeastOneLocationInput = LocationInputFromProps | LocationInputToProps;
 
 function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, locationInputFrom, locationInputTo }: AtLeastOneLocationInput) {
 
-  const { addLocationInputFrom, addLocationInputTo } = useGlobalStore((state:any) => ({
+  const { addLocationInputFrom, addLocationInputTo, updateShouldLocationInputBlur } = useGlobalStore((state:any) => ({
     addLocationInputFrom: state.addLocationInputFrom,
     addLocationInputTo: state.addLocationInputTo,
+    updateShouldLocationInputBlur: state.updateShouldLocationInputBlur
   }))
   
 
@@ -84,7 +85,9 @@ function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, lo
     else {
       addLocationInputTo(IATA);
     }
+    updateShouldLocationInputBlur(true);
   }
+
 
   return (
     <div className={`${((isLocationInputFromOnFocus && locationInputFrom && strMatched.length > 0) || (isLocationInputToOnFocus && locationInputTo && strMatched.length > 0)) ? 'visible' : 'hidden'} text-black bg-white w-full lg:w-[13rem] h-[13rem] overflow-y-scroll z-50 absolute top-[3.1rem] lg:top-[3.6rem] left-0 shadow-xl  scrollable-container`}> 
