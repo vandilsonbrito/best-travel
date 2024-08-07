@@ -1,19 +1,21 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useBookFlight } from '../../hooks/useBookFlight';
-import { useGetAccesToken } from '../../hooks/useGetAccesToken';
-import { useFlightOfferConfirm } from '../../hooks/useFlightOfferConfirm';
-import { useSendBookingEmail } from '../../hooks/useSendBookingEmail';
-import useGlobalStore from '../../utils/stores/useGlobalStore';
-import Header from '../../components/header/Header';
-import Footer from '../../components/footer/Footer';
+import { useBookFlight } from '../../../hooks/useBookFlight';
+import { useGetAccesToken } from '../../../hooks/useGetAccesToken';
+import { useFlightOfferConfirm } from '../../../hooks/useFlightOfferConfirm';
+import { useSendBookingEmail } from '../../../hooks/useSendBookingEmail';
+import useGlobalStore from '../../../utils/stores/useGlobalStore';
+import Header from '../../../components/header/Header';
+import Footer from '../../../components/footer/Footer';
 import Image from 'next/image';
-import { useAirlineName } from '../../hooks/useAirlineName';
-import PreventBackNavigation from '../../components/preventBackNavigation/PreventBackNavigation';
+import { useAirlineName } from '../../../hooks/useAirlineName';
+import PreventBackNavigation from '../../../components/preventBackNavigation/PreventBackNavigation';
+import { useTranslations } from 'next-intl';
 
 const BookFlight: React.FC = () => {
 
     const [isEmailSent, setIsEmailSent] = useState<boolean>(false);
+    const t = useTranslations('Book-flight');
     useEffect(() => {
       setIsEmailSent(!!sessionStorage.getItem('isEmailSent') || false)
     }, [])
@@ -76,7 +78,7 @@ const BookFlight: React.FC = () => {
                     isBookFlightDataFetching || isAirlineNamesFetching ? 
                     (
                         <>
-                            <p className='text-lg mb-3'>Booking...</p>
+                            <p className='text-lg mb-3'>{t("loading")}</p>
                             <span className="loader"></span>
                         </>
                     )
@@ -85,8 +87,8 @@ const BookFlight: React.FC = () => {
                         errorBookingFlight || bookFlightData?.errors?.length > 0 ? 
                         (
                             <>
-                                <p className='text-xl'>Error</p>
-                                <p>Try to book again.</p>
+                                <p className='text-xl'>{t("error.title")}</p>
+                                <p>{t("error.book-again")}</p>
                             </>
                         )
                         :
@@ -95,31 +97,31 @@ const BookFlight: React.FC = () => {
                             bookFlightData?.errors?.status === '400'  ?
                             (
                                 <>
-                                    <p className='text-xl'>Error</p>
-                                    <p>Occurred an error booking this flight, please, review your passenger data or choose another one.</p>
+                                    <p className='text-xl'>{t("error.title")}</p>
+                                    <p>{t("error.fetching")}</p>
                                 </>
                             ) :
                             (
                                 <div className="w-full h-full min-h-[400px] p-5 md:p-12 flex flex-col items-center">
                                     <div className="w-full xl:w-[70%] flex flex-col items-center p-10 border-2 border-borderColor rounded-md">
                                         <div className="w-full flex flex-col items-start text-lg font-medium pb-7 border-b-2 border-borderColor">
-                                            <p>Booking Status: 
-                                                <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'} font-semibold`}>{' ' + (bookFlightData?.data?.ticketingAgreement?.option || ' Error')}</span>
+                                            <p>{t("status")} 
+                                                <span className={`${bookFlightData?.data?.ticketingAgreement?.option === 'CONFIRM' ? 'text-green-500' : 'text-red-500'} font-semibold`}>{' ' + (bookFlightData?.data?.ticketingAgreement?.option || t("error.title"))}</span>
                                             </p>
-                                            <p>Booking Code:
+                                            <p>{t("code")}
                                                 <span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.reference || '----')}</span>
                                             </p>
-                                            <p>Created At:<span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0] || '----'}</span></p>
-                                            <p>Passenger(s): 
-                                                <span className='font-semibold'>{' ' + (bookFlightData?.data?.travelers?.map((traveler:Traveler) => `${traveler?.gender === 'MALE' ? 'Mr.' : 'Mrs.'} ${traveler?.name?.lastName}`).join(', ') || '----')}</span>
+                                            <p>{t("created")}<span className='font-semibold'>{' ' + (bookFlightData?.data?.associatedRecords?.[0]?.creationDate)?.split('T')[0] || '----'}</span></p>
+                                            <p>{t("passengers")} 
+                                                <span className='font-semibold'>{' ' + (bookFlightData?.data?.travelers?.map((traveler:Traveler) => `${traveler?.gender === 'MALE' ? t("mr") : t("mrs")} ${traveler?.name?.lastName}`).join(', ') || '----')}</span>
                                             </p>
-                                            <p>Total Price:
+                                            <p>{t("price")}
                                                 <span className='font-semibold'> {bookFlightData?.data?.flightOffers?.[0]?.price.currency} {' ' + ((bookFlightData?.data?.flightOffers?.[0]?.price?.base) || '----')}</span>
                                             </p>
-                                            <p>Airline(s): 
+                                            <p>{t("airlines")}
                                                 <span className='font-semibold'>{' ' + (airlineNames?.data?.map((airline:any) => ` ${airline?.commonName}` ) || '----')}</span>
                                             </p>
-                                            <p className={`text-base py-2 ${isEmailSent ? 'visible' : 'hidden'}`}>Check your email!</p>
+                                            <p className={`text-base py-2 ${isEmailSent ? 'visible' : 'hidden'}`}>{t("warning")}</p>
                                         </div>
                                         <div className="w-full flex items-center justify-center">
                                             {
@@ -157,11 +159,13 @@ interface FlightDetailsProps {
   }
   
   const FlightDetails = ({ flight, departureDateInput, returnDateInput }: FlightDetailsProps) => {
+    const t = useTranslations('Book-flight');
+
     return (
       <div className="w-full min-h-44 sm:min-h-52 h-full flex flex-col items-center justify-center  sm:pl-7  pb-10 sm:pb-0">
         {flight.itineraries.map((itinerary:any, index:number) => (
           <div key={index} className='w-full h-full flex flex-col '>
-            <p className={`text-center font-bold py-5 sm:ml-10 ${flight.itineraries.length > 0 ? 'visible' : 'hidden'}`}>{ index === 0 && `Departure at ${departureDateInput}` || index === 1 && `Return at ${returnDateInput}` }</p>
+            <p className={`text-center font-bold py-5 sm:ml-10 ${flight.itineraries.length > 0 ? 'visible' : 'hidden'}`}>{ index === 0 && `${t("departure-at")} ${departureDateInput}` || index === 1 && `${t("return-at")} ${returnDateInput}` }</p>
             <ItineraryDetails key={index} itinerary={itinerary} />
           </div>
         ))}
@@ -206,7 +210,8 @@ interface FlightDetailsProps {
   }
 
   const SegmentDetails = ({ itinerary, segment }: SegmentDetailsProps) => {
-
+    const t = useTranslations('Book-flight');
+    
     return (
       <div className='w-full h-[5.2rem] flex flex-col sm:flex-row  justify-between items-center'>
         
@@ -231,7 +236,7 @@ interface FlightDetailsProps {
                           <p className='text-[.9rem] absolute -top-5 -left-[5rem] sm:-left-[6.7rem]'>{formatDuration(segment.duration)}</p>
                           <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 12 12" className=""><path fill="#898294ce" d="M3.922 12h.499a.52.52 0 0 0 .444-.247L7.949 6.8l3.233-.019A.8.8 0 0 0 12 6a.8.8 0 0 0-.818-.781L7.949 5.2 4.866.246A.525.525 0 0 0 4.421 0h-.499a.523.523 0 0 0-.489.71L5.149 5.2H2.296l-.664-1.33a.523.523 0 0 0-.436-.288L0 3.509 1.097 6 0 8.491l1.196-.073a.523.523 0 0 0 .436-.288l.664-1.33h2.853l-1.716 4.49a.523.523 0 0 0 .489.71"></path></svg>
   
-                          <p className={`text-[.81rem] text-green-800 font-medium absolute top-[.8rem] -left-[5.7rem] sm:-left-[7.3rem]  ${segment.length >= 2 ? 'hidden' : 'visible'}`}>{itinerary.segments.length === 1 ? 'Nonstop' : ''}</p>
+                          <p className={`text-[.81rem] text-green-800 font-medium absolute top-[.8rem] -left-[5.7rem] sm:-left-[7.3rem]  ${segment.length >= 2 ? 'hidden' : 'visible'}`}>{itinerary.segments.length === 1 ? t("nonstop") : ''}</p>
   
                       </div>
                       <div className="w-fit">

@@ -1,7 +1,7 @@
 'use client'
-import Banner from '../components/banner/Banner';
-import Suggestions from '../components/suggestions/Suggestions';
-import Footer from '../components/footer/Footer';
+import Banner from '../../components/banner/Banner';
+import Suggestions from '../../components/suggestions/Suggestions';
+import Footer from '../../components/footer/Footer';
 import { useEffect } from 'react';
 
 
