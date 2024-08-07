@@ -30,7 +30,7 @@ type State = {
     flightBooked: any,
     carrierCode: string[],
     passengerBirthPlace: string[], 
-    shouldLocationInputBlur: boolean
+    shouldLocationInputBlur: boolean,
 }
 type Action = {
     updateAccessToken: (accessToken: State['accessToken']) => void;
@@ -62,7 +62,8 @@ type Action = {
     updateFlightBooked: (flightBooked: State['flightBooked']) => void;
     updateCarrierCode: (carrierCode: State['carrierCode']) => void;
     updatePassengerBirthPlace: (passengerBirthPlace: State['passengerBirthPlace']) => void;
-    updateShouldLocationInputBlur: (shouldLocationInputBlur: State['shouldLocationInputBlur']) => void;
+    updateShouldLocationInputBlur: (shouldLocationInputBlur: State['shouldLocationInputBlur']) => void,
+
 }
 const useGlobalStore = create<State & Action>((set) => ({
     accessToken: '',
@@ -124,7 +125,7 @@ const useGlobalStore = create<State & Action>((set) => ({
     passengerBirthPlace: [],
     updatePassengerBirthPlace: (passengerBirthPlace: string[]) => set((state) => ({ ...state, passengerBirthPlace })),
     shouldLocationInputBlur: false,
-    updateShouldLocationInputBlur: (shouldLocationInputBlur) => set(() => ({ shouldLocationInputBlur: shouldLocationInputBlur }))
+    updateShouldLocationInputBlur: (shouldLocationInputBlur) => set(() => ({ shouldLocationInputBlur: shouldLocationInputBlur })),
 }))
 export default useGlobalStore;
 

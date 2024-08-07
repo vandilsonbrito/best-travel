@@ -21,6 +21,7 @@
     "fuse.js": "^7.0.0",
     "lucide-react": "^0.400.0",
     "next": "^14.2.5",
+    "next-intl": "^3.17.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.1",

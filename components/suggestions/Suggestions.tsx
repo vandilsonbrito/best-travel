@@ -5,10 +5,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import useMedia from 'use-media';
+import {useTranslations} from 'next-intl';
+
 
 function Suggestions() {
 
-    const isMobile = useMedia({ maxWidth: '719px' })
+    const t = useTranslations('Home');
+    const isMobile = useMedia({ maxWidth: '719px' });
 
     const suggestionsPlaces = [
         {
@@ -92,7 +95,7 @@ function Suggestions() {
         <section className="w-full h-full ">
             <div className="row w-full h-full flex flex-col justify-center items-center bg-primary px-1 md:px-20 pt-14 pb-20 overflow-hidden">
                 
-                <h2 className="text-lg lg:text-[1.5rem] text-white  lg:font-semibold mb-8 text-center tracking-wide">Favorite Destinations</h2>
+                <h2 className="text-lg lg:text-[1.5rem] text-white  lg:font-semibold mb-8 text-center tracking-wide">{t("Suggestions.title")}</h2>
                 <div className="w-full max-w-[1350px] h-full">
                     <Slider {...settings}>
                     {

@@ -1,22 +1,25 @@
-// components/SearchFlight?.tsx
 'use client'
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Link, usePathname, useRouter } from '../../../navigation';
 import Image from 'next/image';
-import useGlobalStore from '../../utils/stores/useGlobalStore';
-import { useGetAccesToken } from '../../hooks/useGetAccesToken';
-import { useSearchFlights } from '../../hooks/useSearchFlights';
-import CardSkeleton from '../../components/cardSkeleton/CardSkeleton';
-import HeaderSmallDevices from '../../components/formInput/headerSmallDevices/HeaderSmallDevices';
-import CardSkeletonSmallScreen from '../../components/cardSkeleton/CardSkeletonSmallScreen/CardSkeletonSmallScreen';
-import HeaderBigScreens from '../../components/formInput/HeaderBigScreens';
+import useGlobalStore from '../../../utils/stores/useGlobalStore';
+import { useGetAccesToken } from '../../../hooks/useGetAccesToken';
+import { useSearchFlights } from '../../../hooks/useSearchFlights';
+import CardSkeleton from '../../../components/cardSkeleton/CardSkeleton';
+import HeaderSmallDevices from '../../../components/formInput/headerSmallDevices/HeaderSmallDevices';
+import CardSkeletonSmallScreen from '../../../components/cardSkeleton/CardSkeletonSmallScreen/CardSkeletonSmallScreen';
+import HeaderBigScreens from '../../../components/formInput/HeaderBigScreens';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from '../../components/footer/Footer';
-
+import Footer from '../../../components/footer/Footer';
+import { useTranslations } from 'next-intl';
+import useMedia from 'use-media';
 
 const SearchFlight: React.FC = () => {
 
+    const t = useTranslations('Search-flights');
+    const router = useRouter();
+    const isMobile = useMedia({ maxWidth: '1024px' });
     const { updateAccessToken, flightData, addFlightData,  isSearchBtnActive, updateIsSearchBtnActive, isSmallScreenInputClicked, updateIsDataResponseSuccess, isInputDataFilled, isSearchBtnClicked, updateChoseFlight } = useGlobalStore((state) => ({
         updateAccessToken: state.updateAccessToken,
         flightData: state.flightData,
@@ -78,7 +81,7 @@ const SearchFlight: React.FC = () => {
 
     useEffect(() => {
       if(isSearchBtnClicked && (isInputDataFilled === false)) {
-          toast.info("Fill in all the inputs correctly!");
+        toast.info(t("toast"));
       }
     }, [isInputDataFilled, isSearchBtnClicked])
 
@@ -87,22 +90,22 @@ const SearchFlight: React.FC = () => {
         const formInput = document.querySelector('.form-input');
         const headerSmall = document.querySelector('.header-small-devices');
         
-        if(window.innerWidth < 700) {
+        if(isMobile) {
             if(isSmallScreenInputClicked && formInput?.classList.contains('hidden')) {
-              /* console.log("Primeiro IF") */
+              console.log("Primeiro IF")
               formInput?.classList.remove('hidden');
               formInput?.classList.add('visible');
               headerSmall?.classList.remove('visible');
               headerSmall?.classList.add('hidden');
             }
             else if(!isSmallScreenInputClicked && formInput?.classList.contains('visible')) {
-              /* console.log("Segundo IF") */
+              console.log("Segundo IF")
               formInput?.classList.remove('visible');
               formInput?.classList.add('hidden');
               headerSmall?.classList.remove('hidden');
               headerSmall?.classList.add('visible');
             }
-            else if(isSmallScreenInputClicked && formInput?.classList.contains('visible')) {
+            else if(!isSmallScreenInputClicked && formInput?.classList.contains('visible')) {
               console.log("Input está TRUE e FormInput está VISIBLE")
               /* window.addEventListener( 'click', (e) => {
                 e.preventDefault();
@@ -121,6 +124,8 @@ const SearchFlight: React.FC = () => {
    
     const handleBookClick = (index:number) => {
       updateChoseFlight(flightData[index])
+      router.push("/passengers-info");
+      console.log("Clicouuuu")
     }
     
     const handleMoreResultsClick = () => {
@@ -131,9 +136,9 @@ const SearchFlight: React.FC = () => {
     return (
         <main className='w-full h-full '>
             <ToastContainer/>
-            <HeaderSmallDevices className={`header-small-devices  w-full h-full flex flex-col gap-1 sticky top-0 z-50 bg-secundary p-7  sm:hidden`}/>
+            <HeaderSmallDevices className={`header-small-devices  w-full h-full flex flex-col gap-1 sticky top-0 z-50 bg-secundary p-7  lg:hidden`}/>
     
-            <HeaderBigScreens className={`form-input w-full h-full justify-center bg-secundary p-8 pt-5 sm:px-10 shadow-xl z-50 sticky top-0  hidden sm:flex`}/>
+            <HeaderBigScreens className={`form-input w-full h-full justify-center bg-secundary p-8 pt-5 sm:px-10 shadow-xl z-50 sticky top-0  hidden lg:flex`}/>
 
 
                 <div className='w-full h-full min-h-screen bg-white text-black px-5 pt-8 pb-5 lg:px-40 flex flex-col items-center gap-5'>
@@ -162,7 +167,7 @@ const SearchFlight: React.FC = () => {
                       { errorSearchFlight ? 
                         (
                             <>  
-                              <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                              <p className="md:text-xl pt-5 md:pt-20">{t("error-message")}</p>
                             </>
                           
                       ) : ( 
@@ -173,26 +178,25 @@ const SearchFlight: React.FC = () => {
                                     {flightData.map((flight: any, index: number) => (
                                       <li
                                         key={index}
-                                        className="w-full max-w-[800px] flex flex-col sm:flex-row justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl py-6 px-2 mb-4" 
+                                        className="w-full max-w-[900px] flex flex-col sm:flex-row justify-center items-center h-full border-2 border-[#89829446] rounded-xl shadow-xl xl:gap-8 py-6 px-2 lg:pl-2 lg:pr-6 mb-4" 
                                       >
                                         <FlightDetails flight={flight} />
                                         <div
-                                          className={`w-72 h-full pl-2 ${
+                                          className={`w-72 xl:w-[20rem] h-full ${
                                             flight.itineraries.length > 1 && flight.itineraries[0].segments.length > 1
                                               ? 'min-h-[11rem] sm:min-h-[24rem]'
                                               : 'min-h-40 sm:min-h-52'
                                           } flex flex-col justify-center items-center gap-2`}
                                         >
-                                          <p className="text-lg font-semibold">
-                                            {flight.price.currency} {flight.price.base}
-                                          </p>
-                                          <Link
-                                            href="/passengers-info"
-                                            className="px-[4.5rem] py-4 bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
-                                            onClick={() => handleBookClick(index)}
-                                          >
-                                            Book
-                                          </Link>
+                                            <p className="text-lg font-semibold">
+                                              {flight.price.currency} {flight.price.base}
+                                            </p>
+                                            <button
+                                              className="px-7 py-4 xl:px-[4rem] bg-blue-800 text-white font-semibold rounded-xl hover:shadow-xl active:scale-[.98]"
+                                              onClick={() => handleBookClick(index)}
+                                            >
+                                              <Link href=''>{t("button")}</Link>
+                                            </button>
                                         </div>
                                       </li>
                                     ))}
@@ -205,7 +209,7 @@ const SearchFlight: React.FC = () => {
                                 </div>
                             </>
                           ) : (
-                            <p className="md:text-xl pt-5 md:pt-20">No flights found</p>
+                            <p className="md:text-xl pt-5 md:pt-20">{t("error-message")}</p>
                           )}
                       </>
                       
@@ -225,11 +229,12 @@ interface FlightDetailsProps {
 }
 
 const FlightDetails = ({ flight }: FlightDetailsProps) => {
+  const t = useTranslations('Search-flights');
   return (
     <div className="w-full min-h-44 sm:min-h-52 h-full flex flex-col items-center justify-center  sm:pl-7  border-b-2 sm:border-b-0 sm:border-r-2 border-[#89829446] pb-10 sm:pb-0">
       {flight.itineraries.map((itinerary:any, index:number) => (
         <div key={index} className='w-full h-full flex flex-col '>
-          <p className={`text-center font-bold py-5 sm:ml-10 ${flight.itineraries.length > 1 ? 'visible' : 'hidden'}`}>{ index === 0 && 'Departure' || index === 1 && 'Return' }</p>
+          <p className={`text-center font-bold py-5 sm:ml-10 ${flight.itineraries.length > 1 ? 'visible' : 'hidden'}`}>{ index === 0 && t("departure") || index === 1 && t("return") }</p>
           <ItineraryDetails key={index} itinerary={itinerary} />
         </div>
       ))}
@@ -274,6 +279,7 @@ interface SegmentDetailsProps {
 }
 const SegmentDetails = ({ itinerary, segment }: SegmentDetailsProps) => {
 
+  const t = useTranslations('Search-flights');
   return (
     <div className='w-full h-[5.2rem] flex flex-col sm:flex-row  justify-between items-center'>
 
@@ -298,7 +304,7 @@ const SegmentDetails = ({ itinerary, segment }: SegmentDetailsProps) => {
                         <p className='text-[.9rem] absolute -top-5 -left-[5rem] sm:-left-[6.7rem]'>{formatDuration(segment.duration)}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 12 12" className=""><path fill="#898294ce" d="M3.922 12h.499a.52.52 0 0 0 .444-.247L7.949 6.8l3.233-.019A.8.8 0 0 0 12 6a.8.8 0 0 0-.818-.781L7.949 5.2 4.866.246A.525.525 0 0 0 4.421 0h-.499a.523.523 0 0 0-.489.71L5.149 5.2H2.296l-.664-1.33a.523.523 0 0 0-.436-.288L0 3.509 1.097 6 0 8.491l1.196-.073a.523.523 0 0 0 .436-.288l.664-1.33h2.853l-1.716 4.49a.523.523 0 0 0 .489.71"></path></svg>
 
-                        <p className={`text-[.81rem] text-green-800 font-medium absolute top-[.8rem] -left-[5.7rem] sm:-left-[7.3rem]  ${segment.length >= 2 ? 'hidden' : 'visible'}`}>{itinerary.segments.length === 1 ? 'Nonstop' : ''}</p>
+                        <p className={`text-[.81rem] text-green-800 font-medium absolute top-[.8rem] -left-[5.7rem] sm:-left-[7.3rem]  ${segment.length >= 2 ? 'hidden' : 'visible'}`}>{itinerary.segments.length === 1 ? t("nonstop") : ''}</p>
 
                     </div>
                     <div className="w-fit">
