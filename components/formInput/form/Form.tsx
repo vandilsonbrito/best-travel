@@ -3,9 +3,12 @@ import Link from "next/link";
 import { MdPerson } from "react-icons/md";
 import useGlobalStore from '../../../utils/stores/useGlobalStore';
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { parseISO, startOfDay } from 'date-fns';
 import Autocomplete from "../../autocomplete/Autocomplete";
+import {useTranslations} from 'next-intl';
+import { usePathname, useRouter  } from '../../../navigation';
+import useMedia from 'use-media';
+
 
 interface FormProps {
     isFlightSearchPage: boolean;
@@ -37,8 +40,10 @@ export default function Form({ isFlightSearchPage }: FormProps) {
     const [isLocationInputFromOnFocus, setIsLocationInputFromOnFocus] = useState<boolean>(false);
     const [isLocationInputToOnFocus, setIsLocationInputToOnFocus] = useState<boolean>(false);
     const inputRefLocation = useRef<HTMLInputElement>(null);
-
+    const pathname = usePathname();
     const router = useRouter();
+    const t = useTranslations('Home');
+    const isMobile = useMedia({ maxWidth: '1024px' });
 
     /* check inputs */
     const [checkInputs, setCheckInputs] = useState<{ [key: string]: boolean }>({
@@ -88,10 +93,10 @@ export default function Form({ isFlightSearchPage }: FormProps) {
         updateIsSearchBtnClicked(true);
         if(locationInputFrom && locationInputTo && departureDateInput && travelersInput) {
             if(isReturnTravel && returnDateInput) {
-                router.push('/search-flights')
+                router.push(`/search-flights`);
                 updateIsSearchBtnActive(true);
                 updateIsInputDataFilled(true);
-                if(window.innerWidth < 700) {
+                if(isMobile) {
                     updateIsSmallScreenInputClicked(false);
                 }
             }
@@ -99,10 +104,10 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 updateIsInputDataFilled(false);
             }
             else {
-                router.push('/search-flights')
+                router.push(`/search-flights`);
                 updateIsSearchBtnActive(true);
                 updateIsInputDataFilled(true);
-                if(window.innerWidth < 700) {
+                if(isMobile) {
                     updateIsSmallScreenInputClicked(false);
                 }
             }
@@ -178,11 +183,11 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                 <div className="w-full flex justify-start items-start gap-5 mt-8">
                         <div className="w-20 h-5 flex justify-start items-center">
                             <input type="checkbox" name="one-way" id="one-way" className="w-4 h-4 accent-black"  />
-                            <label htmlFor="one-way" className="text-xs ml-1 text-white">One-way</label>
+                            <label htmlFor="one-way" className="text-xs ml-1 text-white">{t("Banner.inputs.trip-mode1")}</label>
                         </div>
                         <div className="w-40 h-5 flex justify-start items-center">
                             <input type="checkbox" name="round-trip" id="round-trip" className="w-4 h-4 accent-black" />
-                            <label htmlFor="round-trip" className="text-xs ml-1 text-white">Round-trip</label>
+                            <label htmlFor="round-trip" className="text-xs ml-1 text-white">{t("Banner.inputs.trip-mode2")}</label>
                         </div>
                 </div>
                 <div className="w-full h-full flex flex-col gap-3 mt-3">
@@ -190,9 +195,9 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                         <div className="w-full h-full flex flex-wrap xl:flex-row justify-center xl:justify-start gap-3">
                             <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md `}>
                                 <div className="w-full absolute -top-[2px] lg:top-[2px]">
-                                    <label htmlFor="from" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">From</label>
+                                    <label htmlFor="from" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">{t("Banner.inputs.placeholder1")}</label>
                                     <input
-                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm"
+                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm  input-airport-from"
                                     type="text"
                                     name="from" 
                                     id="from"
@@ -208,9 +213,9 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                             </div>
                             <div className={`relative w-full h-[3.2rem] ${isFlightSearchPage ? 'xl:w-[15.5rem]' : 'xl:w-[13rem]'} xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md `}>
                                 <div className="w-full absolute -top-[2px] lg:top-[2px]">
-                                    <label htmlFor="to" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">To</label >
+                                    <label htmlFor="to" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">{t("Banner.inputs.placeholder2")}</label >
                                     <input
-                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm"
+                                    className="w-[97%] lg:w-[94%] absolute left-0 top-[1.5rem] py-1 outline-none text-sm  input-airport-to"
                                     type="text"
                                     name="to"
                                     id="to"
@@ -227,7 +232,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                             {/* small screens */}
                             <div className="w-full h-[3.2rem] px-2 pt-1 lg:pt-2 bg-white flex justify-between items-center xl:hidden  rounded-md">
                                 <div className="w-[8rem] h-full flex flex-col overflow-hidden">
-                                    <label htmlFor="departure-arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">Departure</label >
+                                    <label htmlFor="departure-arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">{t("Banner.inputs.placeholder3")}</label >
                                     <input
                                     className="w-full py-1 outline-none text-sm"
                                     type="date"
@@ -239,7 +244,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                     />
                                 </div>
                                 <div className="w-[8rem] h-full flex flex-col overflow-hidden">
-                                    <label htmlFor="departure-arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">Arrive</label >
+                                    <label htmlFor="departure-arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">{t("Banner.inputs.placeholder4")}</label >
                                     <input
                                     className="w-full py-1 outline-none text-sm"
                                     type="date"
@@ -254,7 +259,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                             </div>
                             {/* end */}
                             <div className="w-[9rem] h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white hidden xl:flex flex-col  rounded-md">
-                                <label htmlFor="departure" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">Departure</label >
+                                <label htmlFor="departure" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">{t("Banner.inputs.placeholder3")}</label >
                                 <input
                                 className="w-full py-1 outline-none text-sm"
                                 type="date"
@@ -266,7 +271,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 />
                             </div>
                             <div className="w-[9rem] h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white hidden xl:flex flex-col  rounded-md">
-                                <label htmlFor="arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">Arrive</label >
+                                <label htmlFor="arrive" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500 bg-white">{t("Banner.inputs.placeholder4")}</label >
                                 <input
                                 className="w-full py-1 outline-none text-sm"
                                 type="date"
@@ -278,7 +283,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                                 />
                             </div>
                             <div className="w-full h-[3.2rem] xl:w-32 xl:h-[3.8rem] px-2 pt-1 lg:pt-2 bg-white flex flex-col  rounded-md relative">
-                                <label htmlFor="travelers" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">Travelers</label >
+                                <label htmlFor="travelers" className="text-[0.65rem] lg:text-xs font-semibold text-slate-500">{t("Banner.inputs.placeholder5")}</label >
                                 <input
                                 className="w-full py-1 outline-none text-sm"
                                 type="number"
@@ -301,7 +306,7 @@ export default function Form({ isFlightSearchPage }: FormProps) {
                         >
                             <Link 
                             href=''>
-                                Search
+                                {t("Banner.button")}
                             </Link>
                         </button>
                     </div>
