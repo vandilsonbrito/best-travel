@@ -1,0 +1,96 @@
+{
+    "Home": {
+      "Banner": {
+        "language": "Idioma:",
+        "toast": "Preencha todos os campos corretamente!",
+        "title": "A melhor viagem pelo melhor preço.",
+        "inputs": {
+        "trip-mode1": "Só Ida",
+        "trip-mode2": "Ida e Volta",
+        "placeholder1": "De",
+        "placeholder2": "Para",
+        "placeholder3": "Ida",
+        "placeholder4": "Retorno",
+        "placeholder5": "Viajantes"
+      },
+      "button": "Buscar"
+      },
+      "Suggestions": {
+        "title": "Destinos Favoritos"
+      },
+      "Footer": {
+        "title1": "Compania",
+        "links1": {
+            "link1": "Sobre Nós",
+            "link2": "Blog",
+            "link3": "Dados da Compania",
+            "link4": "Termos de Uso"
+        },
+        "title2": "Ajuda/Perguntas Frequentes",
+        "links2": {
+            "link1": "Parceiros",
+            "link2": "Anuncie com a gente"
+        },
+        "title3": "Mais",
+        "links3": {
+            "link1": "Tarifas aéreas",
+            "link2": "Dicas para melhores preços"
+        }
+      }
+    },
+    "Search-flights": {
+        "error-message": "Nenhum voo encontrado",
+        "button": "Selecionar",
+        "departure": "Ida",
+        "return": "Volta",
+        "nonstop": "Direto",
+        "toast": "Preencha todos os campos corretamente!"
+    },
+    "Passengers-info": {
+        "title": "Passageiros",
+        "subtitle": "Por favor preencha os dados como aparece nos seus documentos",
+        "form": {
+            "label-gender": "Gernder",
+            "input-gender": {
+                "gender1": "Masculino",
+                "gender2": "Feminino"
+            },
+            "error-is-required": "Esse campo é obrigatório",
+            "error-invalid-format": "Formato inválido",
+            "label-first-name": "Nome",
+            "label-last-name": "Sobrenome",
+            "label-birth": "Data de nascimento",
+            "error-age": "Você precisa ter mais de 18 anos",
+            "label-document": "Passaporte ou RG",
+            "error-document": "Número do documento inválido",
+            "label-issuance": "Data de expedição",
+            "label-expire": "Data de expiração",
+            "label-nationality": "Nacionalidade",
+            "label-email": "Email",
+            "error-email": "Email inválido",
+            "label-cellphone": "Telefone",
+            "button": "Submeter"
+        }
+    },
+    "Book-flight": {
+        "loading": "Criando reserva...",
+        "error": {
+            "title": "Erro",
+            "book-again": "Tente reservar novamente",
+            "fetching": "Ocorreu um erro na reserva deste voo, por favor reveja os dados do seu passageiro ou escolha outro voo."
+        },
+        "status": "Status da Reserva:",
+        "code": "Código de Reserva:",
+        "created": "Criado em:",
+        "passengers": "Passageiro(s):",
+        "price": "Preço Total:",
+        "airlines": "Companhia(s):",
+        "warning": "Verifique seu email",
+        "nonstop": "Direto",
+        "departure-at": "Ida em",
+        "return-at": "Retorno em",
+        "mr": "Sr.",
+        "mrs": "Sra."
+
+    }
+}

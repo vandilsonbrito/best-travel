@@ -1,0 +1,96 @@
+{
+    "Home": {
+        "Banner": {
+            "language": "Language:",
+            "toast": "Fill in all the inputs correctly!",
+            "title": "The best travel for the best price.",
+            "inputs": {
+                "trip-mode1": "One-way",
+                "trip-mode2": "Round-trip",
+                "placeholder1": "From",
+                "placeholder2": "To",
+                "placeholder3": "Departure",
+                "placeholder4": "Return",
+                "placeholder5": "Travelers"
+            },
+            "button": "Search"
+        },
+        "Suggestions": {
+          "title": "Favorite Destinations"
+        },
+        "Footer": {
+          "title1": "Company",
+          "links1": {
+              "link1": "About",
+              "link2": "Blog",
+              "link3": "Company data",
+              "link4": "Service terms"
+          },
+          "title2": "Help/FAQ",
+          "links2": {
+              "link1": "Partners",
+              "link2": "Advertise with us"
+          },
+          "title3": "More",
+          "links3": {
+              "link1": "Airline rates",
+              "link2": "Tips for better price"
+          }
+        }
+    },
+    "Search-flights": {
+        "error-message": "No flights found",
+        "button": "Book",
+        "departure": "Departure",
+        "return": "Return",
+        "nonstop": "Nonstop",
+        "toast":"Fill in all the inputs correctly!"
+    },
+    "Passengers-info": {
+        "title": "Passengers",
+        "subtitle": "Please enter data as they appear on passport or travel documentation",
+        "form": {
+            "label-gender": "Gender",
+            "input-gender": {
+                "gender1": "Male",
+                "gender2": "Female"
+            },
+            "error-is-required": "This field is required",
+            "error-invalid-format": "Invalid format",
+            "label-first-name": "First name",
+            "label-last-name": "Last name",
+            "label-birth": "Date Of Birth",
+            "error-age": "You must be at least 18 years old",
+            "label-document": "Passport or ID",
+            "error-document": "Invalid Document Number",
+            "label-issuance": "Issuance Date",
+            "label-expire": "Expire Date",
+            "label-nationality": "Nationality",
+            "label-email": "Email",
+            "error-email": "Invalid Email Address",
+            "label-cellphone": "Mobile number",
+            "button": "Submit"
+        }
+    },
+    "Book-flight": {
+        "loading": "Booking...",
+        "error": {
+            "title": "Error",
+            "book-again": "Try to book again",
+            "fetching": "Occurred an error booking this flight, please, review your passenger data or choose another one."
+        },
+        "status": "Booking Status:",
+        "code": "Booking Code:",
+        "created": "Created At:",
+        "passengers": "Passenger(s):",
+        "price": "Total Price:",
+        "airlines": "Airline(s):",
+        "warning": "Check your email!",
+        "nonstop": "Nonstop",
+        "departure-at": "Departure at",
+        "return-at": "Return at",
+        "mr": "Mr.",
+        "mrs": "Mrs."
+
+    }
+}
