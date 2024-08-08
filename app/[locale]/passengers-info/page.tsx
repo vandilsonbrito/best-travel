@@ -179,12 +179,12 @@ const FormInputs = ({ passengerNumber, register, errors }: FormInputProps) => {
                     }</span>}
                 </div>
                 <div className="w-full md:w-[17rem] flex flex-col">
-                    <label htmlFor={`IssuanceDate${passengerNumber}`}>{t("form.label-issuance")}</label>
+                    <label className='whitespace-nowrap' htmlFor={`IssuanceDate${passengerNumber}`}>{t("form.label-issuance")}</label>
                     <input className='p-2 border-[1px] border-slate-500 rounded-md' type="date" placeholder="Issuance Date" {...register(`IssuanceDate${passengerNumber}`, { required: true })} />
                     {errors[`IssuanceDate${passengerNumber}`] && <span className='text-red-500 font-medium'>{t("form.error-is-required")}</span>}
                 </div>
                 <div className="w-full md:w-[17rem] flex flex-col">
-                    <label htmlFor={`ExpireDate${passengerNumber}`}>{t("form.label-expire")}</label>
+                    <label className='whitespace-nowrap' htmlFor={`ExpireDate${passengerNumber}`}>{t("form.label-expire")}</label>
                     <input className='p-2 border-[1px] border-slate-500 rounded-md' type="date" placeholder="Expire Date" {...register(`ExpireDate${passengerNumber}`, { required: true })} />
                     {errors[`ExpireDate${passengerNumber}`] && <span className='text-red-500 font-medium'>{t("form.error-is-required")}</span>}
                 </div>
