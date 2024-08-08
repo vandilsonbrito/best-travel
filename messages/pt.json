@@ -80,7 +80,7 @@
             "fetching": "Ocorreu um erro na reserva deste voo, por favor reveja os dados do seu passageiro ou escolha outro voo."
         },
         "status": "Status da Reserva:",
-        "code": "Código de Reserva:",
+        "code": "Código da Reserva:",
         "created": "Criado em:",
         "passengers": "Passageiro(s):",
         "price": "Preço Total:",
