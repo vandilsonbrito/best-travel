@@ -24,7 +24,7 @@ type AtLeastOneLocationInput = LocationInputFromProps | LocationInputToProps;
 
 function Autocomplete({ isLocationInputFromOnFocus, isLocationInputToOnFocus, locationInputFrom, locationInputTo }: AtLeastOneLocationInput) {
 
-  const { addLocationInputFrom, addLocationInputTo, updateShouldLocationInputBlur } = useGlobalStore((state:any) => ({
+  const { addLocationInputFrom, addLocationInputTo, updateShouldLocationInputBlur } = useGlobalStore((state) => ({
     addLocationInputFrom: state.addLocationInputFrom,
     addLocationInputTo: state.addLocationInputTo,
     updateShouldLocationInputBlur: state.updateShouldLocationInputBlur

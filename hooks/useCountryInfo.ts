@@ -3,10 +3,9 @@ import useGlobalStore from '../utils/stores/useGlobalStore';
 
 export function useCountryInfo() {
     const { passengerInfo, travelersInput } = useGlobalStore((state) => state);
-    let arr:string[] = [], index = 0, countryCode: string;
+    let arr:string[] = [], countryCode: string;
     for(let i = 0; i < parseInt(travelersInput); i++) {
-        arr.push(passengerInfo?.[`Nationality${index}`]);
-        index++;
+        arr.push(passengerInfo.passengers?.[i].nationality);
     }
     countryCode = arr.join('|')
     const getCountryInfo = async () => {
@@ -23,7 +22,7 @@ export function useCountryInfo() {
     const query = useQuery({
         queryFn: getCountryInfo,
         queryKey: ['country-name'],
-        enabled: !!passengerInfo.Nationality1
+        enabled: !!passengerInfo.passengers?.[0].nationality
     })
     return query;
 }

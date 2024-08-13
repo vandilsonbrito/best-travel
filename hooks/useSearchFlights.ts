@@ -1,6 +1,7 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import useGlobalStore from '../utils/stores/useGlobalStore';
 
+
 export function useSearchFlights(limitOffers:number) {
 
     const { accessToken, locationInputFrom, locationInputTo, departureDateInput, returnDateInput, travelersInput, isReturnTravel, isInputDataFilled } = useGlobalStore((state) => ({

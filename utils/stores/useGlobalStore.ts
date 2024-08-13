@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import {DataItem, FlightData, PassengerInfo} from '../types/types';
 
-type State = {
+export type State = {
     accessToken: string,
-    flightData: any[],
+    flightData: any, //ANY VALUE
     departureTime: string[],
     arrivalTime: string[],
     departureiataCode: string[],
@@ -25,14 +26,14 @@ type State = {
     isSmallScreenInputClicked: boolean, 
     isDataResponseSuccess: boolean,
     isInputDataFilled: boolean,
-    choseFlight: any,
-    passengerInfo: any,
-    flightBooked: any,
+    choseFlight: FlightData, 
+    passengerInfo: PassengerInfo,
+    flightBooked: any, //ANY VALUE
     carrierCode: string[],
     passengerBirthPlace: string[], 
     shouldLocationInputBlur: boolean,
 }
-type Action = {
+export type Action = {
     updateAccessToken: (accessToken: State['accessToken']) => void;
     addFlightData: (flightData: State['flightData']) => void;
     addDepartureTime: (departureTime: State['departureTime'][number]) => void;
@@ -114,9 +115,9 @@ const useGlobalStore = create<State & Action>((set) => ({
     updateIsDataResponseSuccess: (isDataResponseSuccess) => set(() => ({ isDataResponseSuccess: isDataResponseSuccess })),
     isInputDataFilled: false,
     updateIsInputDataFilled: (isInputDataFilled) => set(() => ({ isInputDataFilled: isInputDataFilled })),
-    choseFlight: {},
-    updateChoseFlight: (choseFlight) => set(() => ({ choseFlight: choseFlight })),
-    passengerInfo: {},
+    choseFlight: {} as FlightData,
+    updateChoseFlight: (choseFlight: FlightData) => set(() => ({ choseFlight: choseFlight })),
+    passengerInfo: {} as PassengerInfo,
     updatePassengerInfo: (passengerInfo) => set(() => ({ passengerInfo: passengerInfo })),
     flightBooked: {},
     updateFlightBooked: (flightBooked) => set(() => ({ flightBooked: flightBooked })),
