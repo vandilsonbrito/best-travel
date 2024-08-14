@@ -44,7 +44,8 @@
         "departure": "Ida",
         "return": "Volta",
         "nonstop": "Direto",
-        "toast": "Preencha todos os campos corretamente!"
+        "toast": "Preencha todos os campos corretamente!",
+        "btn-more": "Ver Mais"
     },
     "Passengers-info": {
         "title": "Passageiros",
@@ -77,7 +78,7 @@
         "error": {
             "title": "Erro",
             "book-again": "Tente reservar novamente",
-            "fetching": "Ocorreu um erro na reserva deste voo, por favor reveja os dados do seu passageiro ou escolha outro voo."
+            "fetching": "Ocorreu um erro na reserva deste voo, por favor reveja os dados do passageiro ou escolha outro voo."
         },
         "status": "Status da Reserva:",
         "code": "Código da Reserva:",
