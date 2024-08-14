@@ -7,7 +7,7 @@ const PreventBackNavigation = () => {
 
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
-      router.push('/search-flights');
+      router.push('/');
     };
 
     window.history.pushState(null, '', window.location.href);
