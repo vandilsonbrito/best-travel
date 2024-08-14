@@ -9,7 +9,7 @@ type styleProp = {
 
 function HeaderSmallDevices({ className }: styleProp) {
 
-    const { locationInputFrom, updateIsSmallScreenInputClicked, locationInputTo } = useGlobalStore((state:any) => ({
+    const { locationInputFrom, updateIsSmallScreenInputClicked, locationInputTo } = useGlobalStore((state) => ({
         locationInputFrom: state.locationInputFrom,
         locationInputTo: state.locationInputTo,
         updateIsSmallScreenInputClicked: state.updateIsSmallScreenInputClicked

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { MdPerson } from "react-icons/md";
 import useGlobalStore from '../../../utils/stores/useGlobalStore';
+import { State, Action} from '../../../utils/stores/useGlobalStore'
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { parseISO, startOfDay } from 'date-fns';
 import Autocomplete from "../../autocomplete/Autocomplete";
@@ -16,7 +17,7 @@ interface FormProps {
 
 export default function Form({ isFlightSearchPage }: FormProps) {
 
-    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked, updateShouldLocationInputBlur, shouldLocationInputBlur } = useGlobalStore((state:any) => ({
+    const { locationInputFrom, addLocationInputFrom, locationInputTo, addLocationInputTo, addDepartureDateInput, addReturnDateInput, addTravelersInput, travelersInput, departureDateInput, returnDateInput, updateIsReturnTravel, updateIsSearchBtnActive, updateIsSmallScreenInputClicked, isReturnTravel, updateIsInputDataFilled, updateIsSearchBtnClicked, updateShouldLocationInputBlur, shouldLocationInputBlur } = useGlobalStore((state) => ({
         locationInputFrom: state.locationInputFrom,
         addLocationInputFrom: state.addLocationInputFrom,
         locationInputTo: state.locationInputTo,

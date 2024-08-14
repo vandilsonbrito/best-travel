@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useGlobalStore from '../utils/stores/useGlobalStore';
+import { PassengerInfo } from '../utils/types/types';
 
 export function useBookFlight() {
     const { accessToken, choseFlight, passengerInfo, travelersInput, passengerBirthPlace } = useGlobalStore((state) => ({
@@ -11,48 +12,49 @@ export function useBookFlight() {
     }));
 
 
-    /* console.log("ChoseFlight", choseFlight);
-    console.log("passengerInfo-------", passengerInfo); */
+    /* console.log("ChoseFlight", choseFlight); 
+    console.log("passengerInfo-------", passengerInfo.passengers); 
+    console.log("passengerBirthPlace---", passengerBirthPlace);
+    */
 
     let passengersInformation = [];
-    const passengerInformationModel = (passengerInfo:any, travelersInput:string) => {
-        let index = 1;
-        for(let i = 1; i <= parseInt(travelersInput); i++) {
+    const passengerInformationModel = (passengerInfo:PassengerInfo, travelersInput:string) => { 
+        for(let passengerNumber = 0; passengerNumber < parseInt(travelersInput); passengerNumber++) {
+
             let fillInfo = {
-                id: `${index}`,
-                dateOfBirth: passengerInfo[`DateOfBirth${index}`],
+                id: `${passengerNumber + 1}`,
+                dateOfBirth: passengerInfo.passengers?.[passengerNumber].dateOfBirth,
                 name: {
-                  firstName: (passengerInfo[`FirstName${index}`]).toUpperCase(),
-                  lastName: (passengerInfo[`LastName${index}`]).toUpperCase()
+                  firstName: (passengerInfo.passengers?.[passengerNumber].firstName)?.toUpperCase(),
+                  lastName: (passengerInfo.passengers?.[passengerNumber].lastName)?.toUpperCase()
                 },
-                gender: (passengerInfo[`Gender${index}`]).toUpperCase(),
+                gender: (passengerInfo.passengers?.[passengerNumber].gender)?.toUpperCase(),
                 contact: {
-                  emailAddress: passengerInfo[`Email${index}`],
+                  emailAddress: passengerInfo.passengers?.[passengerNumber].email,
                   phones: [
                     {
                       deviceType: "MOBILE",
                       countryCallingCode: "34",
-                      number: passengerInfo[`MobileNumber${index}`]
+                      number: passengerInfo.passengers?.[passengerNumber].mobileNumber
                     }
                   ]
                 },
                 documents: [
                   {
                     documentType: "PASSPORT",
-                    birthPlace: passengerBirthPlace[index - 1],
-                    issuanceLocation: passengerBirthPlace[index - 1],
-                    issuanceDate: passengerInfo[`IssuanceDate${index}`],
-                    number: passengerInfo[`PassportID${index}`],
-                    expiryDate: passengerInfo[`ExpireDate${index}`],
-                    issuanceCountry: passengerInfo[`Nationality${index}`],
-                    validityCountry: passengerInfo[`Nationality${index}`],
-                    nationality: passengerInfo[`Nationality${index}`],
+                    birthPlace: passengerBirthPlace[passengerNumber],
+                    issuanceLocation: passengerBirthPlace[passengerNumber],
+                    issuanceDate: passengerInfo.passengers?.[passengerNumber].issuanceDate,
+                    number: passengerInfo.passengers?.[passengerNumber].passportOrId,
+                    expiryDate: passengerInfo.passengers?.[passengerNumber].expireDate,
+                    issuanceCountry: passengerInfo.passengers?.[passengerNumber].nationality,
+                    validityCountry: passengerInfo.passengers?.[passengerNumber].nationality,
+                    nationality: passengerInfo.passengers?.[passengerNumber].nationality,
                     holder: true
                   }
                 ]
               }
               passengersInformation.push(fillInfo);
-              index++;
         }
         return passengersInformation;
     }

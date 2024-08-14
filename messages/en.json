@@ -44,7 +44,8 @@
         "departure": "Departure",
         "return": "Return",
         "nonstop": "Nonstop",
-        "toast":"Fill in all the inputs correctly!"
+        "toast":"Fill in all the inputs correctly!",
+        "btn-more": "See More"
     },
     "Passengers-info": {
         "title": "Passengers",
