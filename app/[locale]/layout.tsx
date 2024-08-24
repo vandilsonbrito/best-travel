@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "../../utils/providers/ReactQueryProvider";
-import Head from "next/head";
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
 
