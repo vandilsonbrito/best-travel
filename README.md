@@ -1,7 +1,7 @@
 # Best Travel 
 
 <p>This is a Search Flight Application called Best Travel. I'm using Amadeus API (test mode) to fetch flights data.</p>
-<p>It is possible to search for flights based on origin/destination autocomplete input, dates and passengers quantity, and choose only one-way or return flights</p>
+<p>It is possible to search for flights based on origin/destination autocomplete input, dates and passengers quantity, and choose only one-way or return flights. After choose the flight you fill it up a form with personal info, so then you recceive the booking information with book code, value, passenger(s) sirname(s), etc.</p>
 
 <h2>Technologies</h2>
 
