@@ -23,7 +23,8 @@ It was my first time using react-query to fetch data and zustand as a state mana
 
 <h2>Exibition</h2>
 
-![best-travel](https://github.com/user-attachments/assets/7356e2a0-95a5-4fdd-9a3f-9a305544cf9e)
+![best-travel-app](https://github.com/user-attachments/assets/41d450db-f575-4bd6-8b8f-f70f9f9e2e8c)
+
 
 <h2>Demo</h2>
 https://best-travel-omega.vercel.app/
